@@ -2,6 +2,13 @@
 
 import * as React from 'react';
 import RouterLink from 'next/link';
+import axios from "axios";
+
+import { useState , useEffect ,ChangeEvent,MouseEvent} from 'react';
+
+
+
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Alert from '@mui/material/Alert';
@@ -18,10 +25,12 @@ import { EyeSlash as EyeSlashIcon } from '@phosphor-icons/react/dist/ssr/EyeSlas
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
+import { useAppSelector } from '@/app/Redux/store';
+
 import { paths } from '@/paths';
 import { authClient } from '@/lib/auth/client';
 import { useUser } from '@/hooks/use-user';
-
+import { hello,loginUser } from '@/app/Redux/reducer/user';
 const schema = zod.object({
   email: zod.string().min(1, { message: 'Email is required' }).email(),
   password: zod.string().min(1, { message: 'Password is required' }),
@@ -33,12 +42,42 @@ const defaultValues = { email: 'sofia@devias.io', password: 'Secret1' } satisfie
 
 export function SignInForm(): React.JSX.Element {
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  // const {
+  //   token,
+  //   loggedIn,
+  //   userDetails: { fullName },
+  // } = useSelector((state) => state.user);
+
+ 
+
+  const [udata, setData] = useState({
+    email: "",
+    password: "",
+    age: 0,
+    firstName: "",
+    lastName: "",
+    admin: false,
+  });
 
   const { checkSession } = useUser();
+  useEffect(() => {
+    
+    console.log(udata);
+  }, [udata]);
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const [showPassword, setShowPassword] = React.useState<boolean>();
 
-  const [isPending, setIsPending] = React.useState<boolean>(false);
+  const [isPending, setIsPending] = React.useState<boolean>(true);
+
 
   const {
     control,
@@ -69,6 +108,55 @@ export function SignInForm(): React.JSX.Element {
     [checkSession, router, setError]
   );
 
+const loginSubmit = async (event) => {
+    try {
+      
+    if(udata.email === '' || udata.password === ''){
+      window.alert("Please enter credentials");
+    }
+  
+      event.preventDefault();
+      const res = await axios({
+        
+        url: "http://localhost:5600/auth/login",
+        method: "post",
+        data: { email: udata.email ,password:udata.password },
+      });
+
+     window.alert(res.data.msg);
+      if (res.data.msg === "LOGGED IN"){
+
+
+        window.alert(res.data.msg);
+        console.log(res.data);
+
+        dispatch(
+      
+        loginUser({
+          userDetails: res.data.data,
+          token: res.data.token,
+          loggedIn:true
+        })
+      )
+      dispatch(hello());
+     
+    
+     
+      router.replace(paths.dashboard.overview); // Redirect to the dashboard
+      // const token = useAppSelector((state) => state.reducers.userReducer.userDetails);
+      // console.log("logged in");
+      // console.log("Value is",token);
+      
+      return; // Return to prevent further execution
+    
+    }
+      
+    } catch (e) {
+      window.alert("ERROR");
+      console.error(e);
+    }
+  };
+
   return (
     <Stack spacing={4}>
       <Stack spacing={1}>
@@ -80,7 +168,7 @@ export function SignInForm(): React.JSX.Element {
           </Link>
         </Typography>
       </Stack>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={loginSubmit} >
         <Stack spacing={2}>
           <Controller
             control={control}
@@ -88,7 +176,7 @@ export function SignInForm(): React.JSX.Element {
             render={({ field }) => (
               <FormControl error={Boolean(errors.email)}>
                 <InputLabel>Email address</InputLabel>
-                <OutlinedInput {...field} label="Email address" type="email" />
+                <OutlinedInput {...field} label="Email address" type="email" name='email' onChange={handleInputChange} value={udata.email}/>
                 {errors.email ? <FormHelperText>{errors.email.message}</FormHelperText> : null}
               </FormControl>
             )}
@@ -121,6 +209,9 @@ export function SignInForm(): React.JSX.Element {
                     )
                   }
                   label="Password"
+                  name='password'
+                  value={udata.password}
+                  onChange={handleInputChange}
                   type={showPassword ? 'text' : 'password'}
                 />
                 {errors.password ? <FormHelperText>{errors.password.message}</FormHelperText> : null}
@@ -133,12 +224,12 @@ export function SignInForm(): React.JSX.Element {
             </Link>
           </div>
           {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}
-          <Button disabled={isPending} type="submit" variant="contained">
+          <Button  type="submit" variant="contained">
             Sign in
           </Button>
         </Stack>
       </form>
-      <Alert color="warning">
+      {/* <Alert color="warning">
         Use{' '}
         <Typography component="span" sx={{ fontWeight: 700 }} variant="inherit">
           sofia@devias.io
@@ -147,7 +238,7 @@ export function SignInForm(): React.JSX.Element {
         <Typography component="span" sx={{ fontWeight: 700 }} variant="inherit">
           Secret1
         </Typography>
-      </Alert>
+      </Alert> */}
     </Stack>
   );
 }

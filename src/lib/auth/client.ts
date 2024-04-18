@@ -80,6 +80,7 @@ class AuthClient {
 
     // We do not handle the API, so just check if we have a token in localStorage.
     const token = localStorage.getItem('custom-auth-token');
+    
 
     if (!token) {
       return { data: null };

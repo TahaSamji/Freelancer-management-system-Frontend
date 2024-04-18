@@ -7,6 +7,7 @@ import Alert from '@mui/material/Alert';
 import { paths } from '@/paths';
 import { logger } from '@/lib/default-logger';
 import { useUser } from '@/hooks/use-user';
+import { useAppSelector } from '@/app/Redux/store';
 
 export interface AuthGuardProps {
   children: React.ReactNode;
@@ -14,6 +15,8 @@ export interface AuthGuardProps {
 
 export function AuthGuard({ children }: AuthGuardProps): React.JSX.Element | null {
   const router = useRouter();
+  const loggedIn = useAppSelector((state)=>state.reducers.userReducer.loggedIn);
+  
   const { user, error, isLoading } = useUser();
   const [isChecking, setIsChecking] = React.useState<boolean>(true);
 
@@ -27,7 +30,7 @@ export function AuthGuard({ children }: AuthGuardProps): React.JSX.Element | nul
       return;
     }
 
-    if (!user) {
+    if (loggedIn==false) {
       logger.debug('[AuthGuard]: User is not logged in, redirecting to sign in');
       router.replace(paths.auth.signIn);
       return;

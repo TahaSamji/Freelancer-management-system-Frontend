@@ -1,3 +1,5 @@
+
+
 export const paths = {
   home: '/',
   auth: { signIn: '/auth/sign-in', signUp: '/auth/sign-up', resetPassword: '/auth/reset-password' },
@@ -7,6 +9,7 @@ export const paths = {
     customers: '/dashboard/customers',
     integrations: '/dashboard/integrations',
     settings: '/dashboard/settings',
+    projects : '/dashboard/projects'
   },
   errors: { notFound: '/errors/not-found' },
 } as const;

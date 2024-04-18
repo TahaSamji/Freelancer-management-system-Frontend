@@ -17,6 +17,11 @@ import { authClient } from '@/lib/auth/client';
 import { logger } from '@/lib/default-logger';
 import { useUser } from '@/hooks/use-user';
 
+import { UseDispatch, useDispatch } from 'react-redux';
+import { useAppSelector } from '@/app/Redux/store';
+import { logoutUser } from '@/app/Redux/reducer/user';
+import { UserDetails } from '../account/account-info';
+
 export interface UserPopoverProps {
   anchorEl: Element | null;
   onClose: () => void;
@@ -27,8 +32,15 @@ export function UserPopover({ anchorEl, onClose, open }: UserPopoverProps): Reac
   const { checkSession } = useUser();
 
   const router = useRouter();
+  const dispatch = useDispatch();
 
-  const handleSignOut = React.useCallback(async (): Promise<void> => {
+  const initialState = {
+    userDetails: {},
+    token: "",
+    loggedIn: false,
+  };
+  
+  const handleSignOut2 = React.useCallback(async (): Promise<void> => {
     try {
       const { error } = await authClient.signOut();
 
@@ -48,6 +60,20 @@ export function UserPopover({ anchorEl, onClose, open }: UserPopoverProps): Reac
     }
   }, [checkSession, router]);
 
+  const userDetails : UserDetails = useAppSelector((state) => state.reducers.userReducer.userDetails);
+  
+  const handleSignOut = () => {
+    
+    console.log(userDetails);
+    dispatch(
+      logoutUser(
+        initialState
+      )
+    );
+    router.push("/auth/sign-in");
+    
+  };
+
   return (
     <Popover
       anchorEl={anchorEl}
@@ -57,9 +83,9 @@ export function UserPopover({ anchorEl, onClose, open }: UserPopoverProps): Reac
       slotProps={{ paper: { sx: { width: '240px' } } }}
     >
       <Box sx={{ p: '16px 20px ' }}>
-        <Typography variant="subtitle1">Sofia Rivers</Typography>
+        <Typography variant="subtitle1">{userDetails.fullName}</Typography>
         <Typography color="text.secondary" variant="body2">
-          sofia.rivers@devias.io
+          {userDetails.email}
         </Typography>
       </Box>
       <Divider />

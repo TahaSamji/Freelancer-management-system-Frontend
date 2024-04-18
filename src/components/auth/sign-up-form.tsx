@@ -1,5 +1,5 @@
 'use client';
-
+import axios from 'axios';
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -21,54 +21,100 @@ import { z as zod } from 'zod';
 import { paths } from '@/paths';
 import { authClient } from '@/lib/auth/client';
 import { useUser } from '@/hooks/use-user';
+import { useEffect,useState,ChangeEvent } from 'react';
 
 const schema = zod.object({
-  firstName: zod.string().min(1, { message: 'First name is required' }),
-  lastName: zod.string().min(1, { message: 'Last name is required' }),
+  fullName: zod.string().min(1, { message: 'Name is required' }),
   email: zod.string().min(1, { message: 'Email is required' }).email(),
   password: zod.string().min(6, { message: 'Password should be at least 6 characters' }),
-  terms: zod.boolean().refine((value) => value, 'You must accept the terms and conditions'),
+  utype : zod.string(),
+  
 });
 
 type Values = zod.infer<typeof schema>;
 
-const defaultValues = { firstName: '', lastName: '', email: '', password: '', terms: false } satisfies Values;
+const defaultValues = {  fullName: '', email: '', password: '', utype:''
+ } satisfies Values;
 
 export function SignUpForm(): React.JSX.Element {
   const router = useRouter();
 
   const { checkSession } = useUser();
-
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+    fullName: "",
+    utype :'',
+  });
   const [isPending, setIsPending] = React.useState<boolean>(false);
+  useEffect(() => {
+    
+    console.log(data);
+  }, [data]);
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const {
+    register,
     control,
     handleSubmit,
     setError,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
-  const onSubmit = React.useCallback(
-    async (values: Values): Promise<void> => {
-      setIsPending(true);
 
-      const { error } = await authClient.signUp(values);
+  // const onSubmit = React.useCallback(
+  //   async (values: Values): Promise<void> => {
+  //     setIsPending(true);
 
-      if (error) {
-        setError('root', { type: 'server', message: error });
-        setIsPending(false);
-        return;
-      }
+  //     const { error } = await authClient.signUp(values);
 
-      // Refresh the auth state
-      await checkSession?.();
+  //     if (error) {
+  //       setError('root', { type: 'server', message: error });
+  //       setIsPending(false);
+  //       return;
+  //     }
 
-      // UserProvider, for this case, will not refresh the router
-      // After refresh, GuestGuard will handle the redirect
-      router.refresh();
-    },
-    [checkSession, router, setError]
-  );
+  //     // Refresh the auth state
+  //     await checkSession?.();
+
+  //     // UserProvider, for this case, will not refresh the router
+  //     // After refresh, GuestGuard will handle the redirect
+  //     router.refresh();
+  //   },
+  //   [checkSession, router, setError]
+  // );
+
+  const SignupSubmit = async (data : Values) => {
+  
+    try {
+  console.log(data);
+      const res = await axios({
+        
+        url: "http://localhost:5600/auth/signup",
+        method: "post",
+        data: data,
+      });
+     
+      if (res.data.msg){
+
+
+        window.alert(res.data.msg);
+      
+      return; // Return to prevent further execution
+    
+    }
+      
+    } catch (e) {
+      window.alert("ERROR");
+      console.error(e);
+    }
+  };
 
   return (
     <Stack spacing={3}>
@@ -81,76 +127,60 @@ export function SignUpForm(): React.JSX.Element {
           </Link>
         </Typography>
       </Stack>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(SignupSubmit)}>
         <Stack spacing={2}>
-          <Controller
-            control={control}
-            name="firstName"
-            render={({ field }) => (
-              <FormControl error={Boolean(errors.firstName)}>
-                <InputLabel>First name</InputLabel>
-                <OutlinedInput {...field} label="First name" />
-                {errors.firstName ? <FormHelperText>{errors.firstName.message}</FormHelperText> : null}
+         <Controller
+         control={control}
+         name='fullName'
+         render={({ field }) => (
+              <FormControl error={Boolean(errors.fullName)}>
+                <InputLabel>Full Name</InputLabel>
+                <OutlinedInput  {...register('fullName')} label="Full Name" name='fullName'  onChange={handleInputChange}/>
+                {errors.fullName ? <FormHelperText>{errors.fullName.message}</FormHelperText> : null}
               </FormControl>
-            )}
-          />
-          <Controller
-            control={control}
-            name="lastName"
-            render={({ field }) => (
-              <FormControl error={Boolean(errors.firstName)}>
-                <InputLabel>Last name</InputLabel>
-                <OutlinedInput {...field} label="Last name" />
-                {errors.firstName ? <FormHelperText>{errors.firstName.message}</FormHelperText> : null}
-              </FormControl>
-            )}
-          />
+         )}
+        />
           <Controller
             control={control}
             name="email"
             render={({ field }) => (
               <FormControl error={Boolean(errors.email)}>
                 <InputLabel>Email address</InputLabel>
-                <OutlinedInput {...field} label="Email address" type="email" />
+                <OutlinedInput {...register('email')} label="Email address" type="email" name='email' onChange={handleInputChange} />
                 {errors.email ? <FormHelperText>{errors.email.message}</FormHelperText> : null}
               </FormControl>
             )}
           />
+            <Controller
+            control={control}
+            name="utype"
+            render={({ field }) => (
+              <FormControl error={Boolean(errors.password)}>
+                <InputLabel>User Type</InputLabel>
+                <OutlinedInput  {...register('utype')} label="Role" type="text"  value={data.utype} onChange={handleInputChange}  />
+                {errors.utype? <FormHelperText>{errors.utype.message}</FormHelperText> : null}
+              </FormControl>
+            )}
+          />
+          
           <Controller
             control={control}
             name="password"
             render={({ field }) => (
               <FormControl error={Boolean(errors.password)}>
                 <InputLabel>Password</InputLabel>
-                <OutlinedInput {...field} label="Password" type="password" />
+                <OutlinedInput {...field} {...register('password')} label="Password" type="password"  value={data.password} onChange={handleInputChange}  />
                 {errors.password ? <FormHelperText>{errors.password.message}</FormHelperText> : null}
               </FormControl>
             )}
           />
-          <Controller
-            control={control}
-            name="terms"
-            render={({ field }) => (
-              <div>
-                <FormControlLabel
-                  control={<Checkbox {...field} />}
-                  label={
-                    <React.Fragment>
-                      I have read the <Link>terms and conditions</Link>
-                    </React.Fragment>
-                  }
-                />
-                {errors.terms ? <FormHelperText error>{errors.terms.message}</FormHelperText> : null}
-              </div>
-            )}
-          />
+          
           {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}
           <Button disabled={isPending} type="submit" variant="contained">
             Sign up
           </Button>
         </Stack>
       </form>
-      <Alert color="warning">Created users are not persisted</Alert>
     </Stack>
   );
 }

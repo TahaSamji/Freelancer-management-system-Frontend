@@ -14,7 +14,8 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps): React.JSX.Element {
   return (
     <AuthGuard>
-      <GlobalStyles
+      {/* <div> */}
+        <GlobalStyles
         styles={{
           body: {
             '--MainNav-height': '56px',
@@ -45,6 +46,7 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
           </main>
         </Box>
       </Box>
-    </AuthGuard>
+     
+     </AuthGuard>
   );
 }
