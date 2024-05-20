@@ -18,12 +18,13 @@ import { useAppSelector } from '@/app/Redux/store';
 import { useDispatch } from 'react-redux';
 import { useState ,useEffect,ChangeEvent} from 'react';
 import { Console } from 'console';
+import { SelectChangeEvent } from '@mui/material/Select';
+import { UpdateUser } from '@/app/Redux/reducer/user';
 
 const states = [
-  { value: 'alabama', label: 'Alabama' },
-  { value: 'new-york', label: 'New York' },
-  { value: 'san-francisco', label: 'San Francisco' },
-  { value: 'los-angeles', label: 'Los Angeles' },
+  { value: 'Online', label: 'Online' },
+  { value: 'Offline', label: 'Offline' },
+
 ] as const;
 
 export function AccountDetailsForm(): React.JSX.Element {
@@ -40,12 +41,14 @@ export function AccountDetailsForm(): React.JSX.Element {
     description: userDetails.description,
     skillTags: userDetails.skillTags,
     portfolio: userDetails.portfolio,
+    availability: userDetails.availability
     
   });
   useEffect(() => {
     
     console.log(data);
   }, [data]);
+
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setData((prevData) => ({
@@ -53,6 +56,15 @@ export function AccountDetailsForm(): React.JSX.Element {
       [name]: value,
     }));
   };
+
+  const handleAvailabilityChange = (event: SelectChangeEvent<string>) => {
+    const availabilityValue = event.target.value as string;
+    setData((prevData) => ({
+      ...prevData,
+      availability: availabilityValue,
+    }));
+  };
+
   const  UpdateProfile = async (event: React.FormEvent) =>{
   try {
 
@@ -70,8 +82,11 @@ export function AccountDetailsForm(): React.JSX.Element {
       
     });
    window.alert(res.data.msg);
-    if (res.data.msg){
+    if (res.data.data){
       console.log("success");
+      dispatch( UpdateUser({userDetails:data}))
+   
+
     }  
   } catch (error) {
     
@@ -94,45 +109,41 @@ export function AccountDetailsForm(): React.JSX.Element {
             <Grid md={6} xs={12}>
               <FormControl fullWidth required>
                 <InputLabel>Full Name</InputLabel>
-                <OutlinedInput defaultValue="Sofia" label="First name" name="fullName" value={data.fullName}
+                <OutlinedInput defaultValue={data.fullName} label="First name" name="fullName" value={data.fullName}
                  onChange={handleInputChange}  />
               </FormControl>
             </Grid>
             <Grid md={6} xs={12}>
-              <FormControl fullWidth required>
-                <InputLabel>Last name</InputLabel>
-                <OutlinedInput defaultValue="Rivers" label="Last name" name="lastName" />
-              </FormControl>
-            </Grid>
-            <Grid md={6} xs={12}>
-              <FormControl fullWidth required>
+            <FormControl fullWidth required>
                 <InputLabel>Email address</InputLabel>
                 <OutlinedInput defaultValue={userDetails.email} label="Email address" name="email" value={data.email} onChange={handleInputChange} />
               </FormControl>
             </Grid>
             <Grid md={6} xs={12}>
-              <FormControl fullWidth>
-                <InputLabel>Phone number</InputLabel>
-                <OutlinedInput label="Phone number" name="phone" type="tel" />
+            <FormControl fullWidth>
+                <InputLabel>Position</InputLabel>
+                <OutlinedInput label="Position" name="position" type="text" defaultValue={data.position} value={data.position} onChange={handleInputChange} />
               </FormControl>
             </Grid>
             <Grid md={6} xs={12}>
-              <FormControl fullWidth>
-                <InputLabel>State</InputLabel>
-                <Select defaultValue="New York" label="State" name="state" variant="outlined">
+            <FormControl fullWidth>
+                <InputLabel >Availability</InputLabel>
+                <Select onChange={handleAvailabilityChange} defaultValue={data.availability} label="Availablity" name="availability" variant="outlined" value={data.availability} >
                   {states.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
+                    <MenuItem  key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             </Grid>
-            <Grid md={6} xs={12}>
-              <FormControl fullWidth>
-                <InputLabel>City</InputLabel>
-                <OutlinedInput label="City" />
+            <Grid md={12} xs={24}>
+            <FormControl fullWidth>
+                <InputLabel>Description</InputLabel>
+                <OutlinedInput label="Description" name="description" type="text" defaultValue={data.description} value={data.description} onChange={handleInputChange} />
               </FormControl>
+           
+             
             </Grid>
           </Grid>
         </CardContent>

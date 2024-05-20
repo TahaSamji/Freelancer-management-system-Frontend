@@ -37,7 +37,7 @@ export function AuthGuard({ children }: AuthGuardProps): React.JSX.Element | nul
     }
 
     setIsChecking(false);
-  };
+  }
 
   React.useEffect(() => {
     checkPermissions().catch(() => {

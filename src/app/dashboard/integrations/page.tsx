@@ -91,13 +91,13 @@ export default function Page(): React.JSX.Element {
         </div>
       </Stack>
       <CompaniesFilters />
-      <Grid container spacing={3}>
+      {/* <Grid container spacing={3}>
         {integrations.map((integration) => (
           <Grid key={integration.id} lg={4} md={6} xs={12}>
             <IntegrationCard integration={integration} />
           </Grid>
         ))}
-      </Grid>
+      </Grid> */}
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <Pagination count={3} size="small" />
       </Box>

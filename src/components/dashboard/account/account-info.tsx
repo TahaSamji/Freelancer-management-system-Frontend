@@ -24,6 +24,8 @@ export interface UserDetails {
   description?: string,
   skillTags?: [string],
   portfolio?: [{}],
+  availability? : string,
+  utype ?: string
 
   // Add other properties if needed
 };
@@ -38,10 +40,11 @@ export function AccountInfo(): React.JSX.Element {
 
   const user = {
     name: userDetails.fullName,
-    avatar: '/assets/avatar.png',
+    avatar: '/assets/Muhammad_Taha_Samji.jpeg.jpg',
     jobTitle: userDetails.position,
     email :userDetails.email,
-    description:userDetails.description
+    description:userDetails.description,
+    availability : userDetails.availability
 
 
   } as const;
@@ -56,10 +59,16 @@ export function AccountInfo(): React.JSX.Element {
           <Stack spacing={1} sx={{ textAlign: 'center' }}>
             <Typography variant="h5">{user.name}</Typography>
             <Typography color="text.secondary" variant="body2">
-            {user.email}
+            Email: {user.email}
             </Typography>
             <Typography color="text.secondary" variant="body2">
-            {user.description}
+            Position: {user.jobTitle}
+            </Typography>
+            <Typography color="text.secondary" variant="body2">
+            Availability: {user.availability}
+            </Typography>
+            <Typography color="text.secondary" variant="body2">
+            Description: {user.description}
             </Typography>
           </Stack>
         </Stack>

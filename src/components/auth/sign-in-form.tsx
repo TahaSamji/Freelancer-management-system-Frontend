@@ -30,7 +30,7 @@ import { useAppSelector } from '@/app/Redux/store';
 import { paths } from '@/paths';
 import { authClient } from '@/lib/auth/client';
 import { useUser } from '@/hooks/use-user';
-import { hello,loginUser } from '@/app/Redux/reducer/user';
+import { loginUser } from '@/app/Redux/reducer/user';
 const schema = zod.object({
   email: zod.string().min(1, { message: 'Email is required' }).email(),
   password: zod.string().min(1, { message: 'Password is required' }),
@@ -129,6 +129,7 @@ const loginSubmit = async (event) => {
 
         window.alert(res.data.msg);
         console.log(res.data);
+        console.log(res.data.data.availability);
 
         dispatch(
       
@@ -138,7 +139,7 @@ const loginSubmit = async (event) => {
           loggedIn:true
         })
       )
-      dispatch(hello());
+     
      
     
      
