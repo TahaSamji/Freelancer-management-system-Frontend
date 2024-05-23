@@ -143,7 +143,7 @@ export function Projects(): React.JSX.Element {
       
       ShowProjects();
       
-    }, []);
+    }, [project]);
    
     return (
       <Box>
@@ -173,8 +173,8 @@ export function Projects(): React.JSX.Element {
                
 
                 <Button onClick={()=>DeleteProject(projects._id)} variant="contained">
-            Delete Project
-          </Button>
+                  Delete Project
+                </Button>
               </p>
             </Card>
           ))}
