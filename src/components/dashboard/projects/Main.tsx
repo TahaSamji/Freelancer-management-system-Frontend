@@ -1,7 +1,7 @@
 'use client';
 
 import React from "react";
-import { Projects } from "./projects";
+import { Projects } from "./seller/projects";
 import { useAppSelector } from "@/app/Redux/store";
 import { Bids } from "./MyBids";
 

@@ -19,7 +19,7 @@ import { IntegrationCard } from '@/components/dashboard/integrations/integration
 import type { Integration } from '@/components/dashboard/integrations/integrations-card';
 import { CompaniesFilters } from '@/components/dashboard/integrations/integrations-filters';
 import { useAppSelector } from '@/app/Redux/store';
-import { Projects } from '@/components/dashboard/projects/projects';
+import { Projects } from '@/components/dashboard/projects/seller/projects';
 import { Main } from '@/components/dashboard/projects/Main';
 
 

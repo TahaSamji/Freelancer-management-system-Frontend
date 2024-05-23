@@ -12,7 +12,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
-
+import axios from 'axios';
 import { authClient } from '@/lib/auth/client';
 
 const schema = zod.object({ email: zod.string().min(1, { message: 'Email is required' }).email() });
@@ -31,29 +31,55 @@ export function ResetPasswordForm(): React.JSX.Element {
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
-  const onSubmit = React.useCallback(
-    async (values: Values): Promise<void> => {
-      setIsPending(true);
+  // const onSubmit = React.useCallback(
+  //   async (values: Values): Promise<void> => {
+  //     setIsPending(true);
 
-      const { error } = await authClient.resetPassword(values);
+  //     const { error } = await authClient.resetPassword(values);
 
-      if (error) {
-        setError('root', { type: 'server', message: error });
-        setIsPending(false);
-        return;
-      }
+  //     if (error) {
+  //       setError('root', { type: 'server', message: error });
+  //       setIsPending(false);
+  //       return;
+  //     }
 
-      setIsPending(false);
+  //     setIsPending(false);
 
-      // Redirect to confirm password reset
-    },
-    [setError]
-  );
+  //     // Redirect to confirm password reset
+  //   },
+  //   [setError]
+
+  // );
+
+  const forgetPassword = async (data : Values) => {
+  
+    try {
+      const res = await axios({
+        
+        url: "http://localhost:5600/auth/forgetPassword",
+        method: "post",
+        data: data,
+      });
+     
+      if (res.data.msg){
+
+
+        window.alert(res.data.msg);
+      
+      return; // Return to prevent further execution
+    
+    }
+      
+    } catch (e) {
+      window.alert("ERROR");
+      console.error(e);
+    }
+  };
 
   return (
     <Stack spacing={4}>
       <Typography variant="h5">Reset password</Typography>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(forgetPassword)}>
         <Stack spacing={2}>
           <Controller
             control={control}
