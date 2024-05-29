@@ -7,125 +7,138 @@ import Card from '@mui/material/Card';
 import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { Button, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useAppSelector } from '@/app/Redux/store';
+import axios from 'axios';
 import dayjs from 'dayjs';
-
-import { useSelection } from '@/hooks/use-selection';
+import { useEffect } from 'react';
 
 function noop(): void {
   // do nothing
 }
 
-export interface Customer {
+export interface User {
   id: string;
-  avatar: string;
-  name: string;
+  fullName: string;
   email: string;
-  address: { city: string; state: string; country: string; street: string };
-  phone: string;
+  utype: string;
   createdAt: Date;
 }
 
-interface CustomersTableProps {
-  count?: number;
-  page?: number;
-  rows?: Customer[];
-  rowsPerPage?: number;
-}
+export function CustomersTable() {
+  const [users, setUsers] = React.useState<User[]>([]);
+  const [selectedUsers, setSelectedUsers] = React.useState<string[]>([]);
+  const token = useAppSelector((state) => state.reducers.userReducer.token);
+  const loggedIn = useAppSelector((state) => state.reducers.userReducer.loggedIn);
 
-export function CustomersTable({
-  count = 0,
-  rows = [],
-  page = 0,
-  rowsPerPage = 0,
-}: CustomersTableProps): React.JSX.Element {
-  const rowIds = React.useMemo(() => {
-    return rows.map((customer) => customer.id);
-  }, [rows]);
+  const getAllProfiles = async () => {
+    try {
+      const res = await axios({
+        url: "http://localhost:5600/user/getAllProfiles",
+        method: "get",
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
-  const { selectAll, deselectAll, selectOne, deselectOne, selected } = useSelection(rowIds);
+      if (res.data.users) {
+        // Map the _id field to id
+        const usersWithId = res.data.users.map(user => ({
+          ...user,
+          id: user._id,
+          createdAt: new Date(user.createdAt)
+        }));
 
-  const selectedSome = (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < rows.length;
-  const selectedAll = rows.length > 0 && selected?.size === rows.length;
+        setUsers(usersWithId);
+        return;
+      }
+      
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const viewProfile = async (userId: string) => {
+    try {
+      const res = await axios({
+        url: `http://localhost:5600/user/viewProfile/${userId}`,
+        method: "get",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      console.log(res.data); // Handle the response as needed
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const deleteUsers = async () => {
+    try {
+      const res = await axios({
+        url: `http://localhost:5600/user/deleteUsers/${selectedUsers.join(",")}`,
+        method: "post",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      console.log(res.data); // Handle the response as needed
+      await getAllProfiles(); // Refresh the user list
+      setSelectedUsers([]); // Clear the selected users
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    if (loggedIn && token !== "") getAllProfiles();
+  }, [loggedIn]);
+
+  const columns: GridColDef[] = [
+    { field: 'fullName', headerName: 'Full name', width: 160, flex: 1 },
+    { field: 'email', headerName: 'Email', width: 200, flex: 1 },
+    { field: 'utype', headerName: 'User Type', width: 90, flex: 1 },
+    {
+      field: 'createdAt',
+      headerName: 'Signed Up',
+      type: 'date',
+      width: 130,
+      flex: 1
+    },
+    {
+      field: 'profile',
+      headerName: 'Profile',
+      flex: 1,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => viewProfile(params.row.id)}
+        >
+          View Profile
+        </Button>
+      ),
+    },
+  ];
 
   return (
-    <Card>
-      <Box sx={{ overflowX: 'auto' }}>
-        <Table sx={{ minWidth: '800px' }}>
-          <TableHead>
-            <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  checked={selectedAll}
-                  indeterminate={selectedSome}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      selectAll();
-                    } else {
-                      deselectAll();
-                    }
-                  }}
-                />
-              </TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Location</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Signed Up</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => {
-              const isSelected = selected?.has(row.id);
-
-              return (
-                <TableRow hover key={row.id} selected={isSelected}>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isSelected}
-                      onChange={(event) => {
-                        if (event.target.checked) {
-                          selectOne(row.id);
-                        } else {
-                          deselectOne(row.id);
-                        }
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-                      <Avatar src={row.avatar} />
-                      <Typography variant="subtitle2">{row.name}</Typography>
-                    </Stack>
-                  </TableCell>
-                  <TableCell>{row.email}</TableCell>
-                  <TableCell>
-                    {row.address.city}, {row.address.state}, {row.address.country}
-                  </TableCell>
-                  <TableCell>{row.phone}</TableCell>
-                  <TableCell>{dayjs(row.createdAt).format('MMM D, YYYY')}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Box>
-      <Divider />
-      <TablePagination
-        component="div"
-        count={count}
-        onPageChange={noop}
-        onRowsPerPageChange={noop}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
+    <div style={{ height: 400, width: '100%' }}>
+      <DataGrid
+        rows={users}
+        columns={columns}
+        initialState={{
+          pagination: {
+            paginationModel: { page: 0, pageSize: 5 },
+          },
+        }}
+        pageSizeOptions={[5, 10]}
+        checkboxSelection
+        onRowSelectionModelChange={(newSelection) => {
+          setSelectedUsers(newSelection as string[]);
+        }}
       />
-    </Card>
+      {selectedUsers.length > 0 && (
+        <IconButton onClick={deleteUsers} color="secondary">
+          <DeleteIcon />
+        </IconButton>
+      )}
+    </div>
   );
 }
