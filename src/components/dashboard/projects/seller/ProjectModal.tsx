@@ -91,6 +91,7 @@ const EditProjectModal = ({open ,handleClose,projData}) => {
            if(res.data.msg ==="Project Updated successfully"){
             
             window.alert(res.data.msg);
+            handleClose();
             console.log("update data",res.data.data);
             return;
             

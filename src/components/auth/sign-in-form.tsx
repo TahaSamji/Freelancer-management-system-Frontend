@@ -44,12 +44,6 @@ export function SignInForm(): React.JSX.Element {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  // const {
-  //   token,
-  //   loggedIn,
-  //   userDetails: { fullName },
-  // } = useSelector((state) => state.user);
-
  
 
   const [udata, setData] = useState({
@@ -58,14 +52,19 @@ export function SignInForm(): React.JSX.Element {
     age: 0,
     firstName: "",
     lastName: "",
-    admin: false,
+    admin: false
   });
 
+
+
+
   const { checkSession } = useUser();
+
   useEffect(() => {
     
     console.log(udata);
   }, [udata]);
+
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setData((prevData) => ({
@@ -129,19 +128,8 @@ const loginSubmit = async (event) => {
 
         window.alert(res.data.msg);
         console.log(res.data);
-        console.log(res.data.data.availability);
-
-        dispatch(
-      
-        loginUser({
-          userDetails: res.data.data,
-          token: res.data.token,
-          loggedIn:true
-        })
-      )
      
-     
-    
+     getprofile(res.data.token);
      
       router.replace(paths.dashboard.overview); // Redirect to the dashboard
       // const token = useAppSelector((state) => state.reducers.userReducer.userDetails);
@@ -157,6 +145,42 @@ const loginSubmit = async (event) => {
       console.error(e);
     }
   };
+
+  const getprofile = async (token :string) => {
+  
+    try {
+      console.log("getprofile ",token)
+      const res = await axios({
+        
+        url:"http://localhost:5600/user/viewProfile",
+        method: "get",
+        headers: {
+          Authorization: `Bearer ${token}` 
+        }
+      });
+
+     console.log(res.data);
+      if (res.status === 200){
+
+        dispatch(
+      
+          loginUser({
+            userDetails : res.data.user,
+            token,
+            loggedIn:true
+          })
+        )
+      
+      return; // Return to prevent further execution
+    
+    }
+      
+    } catch (e) {
+      window.alert("ERROR");
+      console.error(e);
+    }
+  };
+
 
   return (
     <Stack spacing={4}>

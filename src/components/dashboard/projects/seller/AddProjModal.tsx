@@ -99,6 +99,7 @@ const AddProject = ({open ,handleClose}) => {
            if(res.data.msg ==="Project created successfully"){
             
             window.alert(res.data.msg);
+            handleClose();
             console.log(" data",res.data.data);
             return;
             

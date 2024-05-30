@@ -3,7 +3,7 @@
 import React from "react";
 import { Projects } from "./seller/projects";
 import { useAppSelector } from "@/app/Redux/store";
-import { Bids } from "./MyBids";
+import { Bids } from "./freelancer/MyBids";
 
 export function Main(): React.JSX.Element {
     const utype = useAppSelector((state)=>state.reducers.userReducer.userDetails.utype);

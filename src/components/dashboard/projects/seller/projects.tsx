@@ -2,13 +2,13 @@
 
 import axios from "axios";
 import { Box } from "@mui/system";
-import {Button} from "@mui/material";
+import {Button, Tab, Tabs} from "@mui/material";
 import { Upload as UploadIcon } from '@phosphor-icons/react/dist/ssr/Upload';
 import { Card,Grid } from "@mui/material";
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 
 import {Typography} from "@mui/material";
-import React from "react";
+import React, { ChangeEvent } from "react";
 import EditProjectModal from "./ProjectModal";
 
 
@@ -45,20 +45,28 @@ export function Projects(): React.JSX.Element {
     const [project, setproject] = useState<Project[]>([]);
     const [open, setOpen] = React.useState(false);
     const [open2, setOpen2] = React.useState(false);
+    const [status, setStatus] = useState<string>("notHired");
+   
   
-    const [selectedProject, setSelectedProject] = useState<Project>(); // State to hold selected project ID
+    const [selectedProject, setSelectedProject] = useState<Project>(); 
 
     const handleOpen = (projid:Project) => {
-      setSelectedProject(projid); // Set the selected project ID
-      setOpen(true); // Open the modal
+      setSelectedProject(projid); 
+      setOpen(true); 
     };
   
     
     const handleOpen2 = () => {
 
-      setOpen2(true); // Open the modal
+      setOpen2(true); 
     };
-  
+
+    const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
+      
+      setStatus(newValue);
+      ShowProjects(newValue);
+
+    };
     
    
     const handleClose = () => setOpen(false);
@@ -109,28 +117,24 @@ export function Projects(): React.JSX.Element {
     };
 
   
-    const ShowProjects = async () => {
+    const ShowProjects = async (status:String) => {
       try {
   
         const res = await axios({
           
-          url: "http://localhost:5600/project/ShowMyProjects",
+          url: `http://localhost:5600/project/ShowMyProjects/${status}`,
           method: "get",
           headers: {
-            Authorization: `Bearer ${token}` // Send token in the Authorization header
+            Authorization: `Bearer ${token}` 
           }
-  
         });
     
-         if(res.data.data){
+         if(res.status === 200){
           
           setproject(res.data.data);
           console.log(res.data.data);
           }
-        
-          
           return;
-  
          }
        catch (e) {
         window.alert("ERROR");
@@ -141,10 +145,13 @@ export function Projects(): React.JSX.Element {
   
     useEffect(() => {
       
-      ShowProjects();
+      ShowProjects(status);
+    
       
-    }, [project]);
+    }, []);
    
+
+
     return (
       <Box>
         <dl></dl>
@@ -153,6 +160,19 @@ export function Projects(): React.JSX.Element {
         </Button>
             <dl></dl>
                
+               <Box>
+        <Tabs
+        value={status}
+        onChange={handleTabChange}
+        textColor="secondary"
+        indicatorColor="secondary"
+        aria-label="secondary tabs example"
+      >
+        <Tab value="notHired" label="Nothired" />
+        <Tab value="pending" label="Pending" />
+        <Tab value="completed" label="Completed" />
+      </Tabs>
+               </Box>
         <Box
           sx={{
             display: 'grid',

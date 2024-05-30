@@ -70,7 +70,7 @@ export function MainNav(): React.JSX.Element {
             <Avatar
               onClick={userPopover.handleOpen}
               ref={userPopover.anchorRef}
-              src="/assets/Muhammad_Taha_Samji.jpeg.jpg"
+              src=""
               sx={{ cursor: 'pointer' }}
             />
           </Stack>
