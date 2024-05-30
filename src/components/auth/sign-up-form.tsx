@@ -89,7 +89,7 @@ export function SignUpForm(): React.JSX.Element {
   //   },
   //   [checkSession, router, setError]
   // );
-
+  
   const SignupSubmit = async (data : Values) => {
   
     try {
@@ -100,9 +100,8 @@ export function SignUpForm(): React.JSX.Element {
         method: "post",
         data: data,
       });
-     
+      
       if (res.data.msg){
-
 
         window.alert(res.data.msg);
       
