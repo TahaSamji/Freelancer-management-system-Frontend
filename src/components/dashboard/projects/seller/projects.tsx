@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { Box } from "@mui/system";
-import {Button, Tab, Tabs} from "@mui/material";
+import {Button, Pagination, PaginationItem, Tab, Tabs} from "@mui/material";
 import { Upload as UploadIcon } from '@phosphor-icons/react/dist/ssr/Upload';
 import { Card,Grid } from "@mui/material";
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
@@ -16,6 +16,7 @@ import { useState,useEffect } from "react";
 import { useAppSelector } from "@/app/Redux/store";
 import { WindowsLogo } from "@phosphor-icons/react";
 import AddProject from "./AddProjModal";
+import ViewBidProjectModal from "./ViewBidsModal";
 
 
  
@@ -45,7 +46,9 @@ export function Projects(): React.JSX.Element {
     const [project, setproject] = useState<Project[]>([]);
     const [open, setOpen] = React.useState(false);
     const [open2, setOpen2] = React.useState(false);
+    const [open3, setOpen3] = React.useState(false);
     const [status, setStatus] = useState<string>("notHired");
+    const [page, setPage] = React.useState(1);
    
   
     const [selectedProject, setSelectedProject] = useState<Project>(); 
@@ -61,18 +64,27 @@ export function Projects(): React.JSX.Element {
       setOpen2(true); 
     };
 
+    const handleOpen3 = (proj:Project) => {
+      setSelectedProject(proj); 
+ 
+      setOpen3(true); 
+    };
     const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
       
       setStatus(newValue);
       ShowProjects(newValue);
 
     };
+    // const handlepageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    //   setPage(value);
+    //   ShowProjects(value);
+    // };
     
    
     const handleClose = () => setOpen(false);
     
     const handleClose2 = () => setOpen2(false);
-  
+    const handleClose3 = () => setOpen3(false);
  
     const style = {
       position: 'absolute' as 'absolute',
@@ -195,12 +207,20 @@ export function Projects(): React.JSX.Element {
                 <Button onClick={()=>DeleteProject(projects._id)} variant="contained">
                   Delete Project
                 </Button>
+
+                <Button onClick={()=>handleOpen3(projects)} variant="contained">
+                  View Bids
+                </Button>
               </p>
             </Card>
           ))}
           {open && <EditProjectModal open={open} handleClose={handleClose} projData={selectedProject} />}
           {open2 && <AddProject open={open2} handleClose={handleClose2} />}
+          {open3 && <ViewBidProjectModal open={open3} handleClose={handleClose3}  projdata={selectedProject}/>}
         </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        {/* <Pagination count={3} size="small" page={page}  onChange={handlepageChange} /> */}
+      </Box>
       </Box>
     );
   }

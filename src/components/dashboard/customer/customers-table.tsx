@@ -62,7 +62,7 @@ export function CustomersTable() {
   const viewProfile = async (userId: string) => {
     try {
       const res = await axios({
-        url: `http://localhost:5600/user/viewProfile/${userId}`,
+        url: `http://localhost:5600/user/ShowProfile/${userId}`,
         method: "get",
         headers: { Authorization: `Bearer ${token}` }
       });

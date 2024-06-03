@@ -4,7 +4,21 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // initial state
 const initialState = {
-  userDetails: {utype:''},
+  userDetails: {
+    _id:"",
+    utype:'',
+    notifications:[{ 
+      message:"",
+      ntype:"",
+      createdAt: Date,
+      ProjectId:{
+        projectName:"",
+        _id:""
+      },
+      _id:""
+    }   ]
+  
+  },
   token: "",
   loggedIn: false
 };

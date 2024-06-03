@@ -12,6 +12,8 @@ import { TasksProgress } from '@/components/dashboard/overview/tasks-progress';
 import { TotalCustomers } from '@/components/dashboard/overview/total-customers';
 import { TotalProfit } from '@/components/dashboard/overview/total-profit';
 import { Traffic } from '@/components/dashboard/overview/traffic';
+import { CustomersTable } from '@/components/dashboard/customer/customers-table';
+import { ReviewRequests } from '@/components/dashboard/overview/review-request-table';
 
 export const metadata = { title: `Overview | Dashboard | ${config.site.name}` } satisfies Metadata;
 
@@ -38,6 +40,8 @@ export default function Page(): React.JSX.Element {
           ]}
           sx={{ height: '100%' }}
         />
+       {/* <InactiveUsers /> */}
+       {/* <ReviewRequests/> */}
       </Grid>
       <Grid lg={4} md={6} xs={12}>
         <Traffic chartSeries={[63, 15, 22]} labels={['Desktop', 'Tablet', 'Phone']} sx={{ height: '100%' }} />

@@ -78,9 +78,6 @@ export default function Page(): React.JSX.Element {
         </Stack>
       </Stack>
       <SearchProjects />
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Pagination count={3} size="small" />
-      </Box>
     </Stack>
   );
 }

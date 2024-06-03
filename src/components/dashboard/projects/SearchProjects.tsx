@@ -7,26 +7,46 @@ import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 import { useState,ChangeEvent,useEffect } from 'react';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, Pagination } from '@mui/material';
 import { useAppSelector } from '@/app/Redux/store';
 import { Box } from '@mui/system';
 import { Project } from './seller/projects';
+import AddBid from './freelancer/AddBidModal';
+import AddBidModal from './freelancer/AddBidModal';
 
 
 
 export function SearchProjects(): React.JSX.Element {
 
   const token = useAppSelector((state)=>state.reducers.userReducer.token);
-
+  const usertype = useAppSelector((state)=>state.reducers.userReducer.userDetails.utype);
+  const [page, setPage] = React.useState(1);
 
   const [search, setsearch] = useState({
    Search : ""
   });
   const [project, setproject] = useState<Project[]>([]);
+  const [num, setnum] = useState<number>(1);
+   let totalpages = 0;
+
+  const [open, setOpen] = React.useState(false);
+
+  const [selectedProject, setSelectedProject] = useState<Project>(); 
+
+  const handleOpen = (proj:Project) => {
+    setSelectedProject(proj); 
+    setOpen(true); 
+  };
+
+  
+  const handleClose = () => setOpen(false);
+
   useEffect(() => {
     
     console.log(project);
+    
   }, [project]);
+ 
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -34,14 +54,24 @@ export function SearchProjects(): React.JSX.Element {
       ...prevData,
       [name]: value,
     }));
+
   };
 
-  const Searchproj = async () => {
+  const handlepageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+    Searchproj(value);
+  };
+
+  useEffect(() => {
+    console.log(page);
+  }, [page]);
+  
+  const Searchproj = async (page:number) => {
   
     try {
       const res = await axios({
         
-        url: "http://localhost:5600/project/SearchProjects",
+        url:`http://localhost:5600/project/SearchProjects?page=${page}`,
         method: "post",
         data: {Search : search.Search},
         headers: {
@@ -54,6 +84,9 @@ export function SearchProjects(): React.JSX.Element {
 
         window.alert("yess");
         setproject(res.data.data);
+
+        
+
       
       return; // Return to prevent further execution
     
@@ -84,7 +117,7 @@ export function SearchProjects(): React.JSX.Element {
         sx={{ maxWidth: '500px' }}
       />
      
-       <Button onClick={()=>Searchproj()} startIcon={<MagnifyingGlassIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
+       <Button onClick={()=>Searchproj(page)} startIcon={<MagnifyingGlassIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
             Search
           </Button>
           
@@ -101,12 +134,19 @@ export function SearchProjects(): React.JSX.Element {
               <h2>{projects.projectName}</h2>
               <p>{projects.projectDescription}</p>
               <p>{projects.projectLength}</p>
-             
+
+              {usertype == 'Freelancer' && <Button onClick={()=>handleOpen(projects)} variant="contained">
+                  Add Bid
+                </Button>}
              </Card>
       
         ))}
+              {open && <AddBidModal open={open} handleClose={handleClose} projdata={selectedProject} />}
     
     </Box>
+    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Pagination count={10} size="small" page={page}  onChange={handlepageChange} />
+      </Box>
     </Box>
     
   );
