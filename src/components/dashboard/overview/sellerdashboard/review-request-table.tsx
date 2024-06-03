@@ -19,11 +19,13 @@ import axios from 'axios';
 import { useAppSelector } from '@/app/Redux/store';
 import { useEffect } from 'react';
 
+
 export interface notifications {
   _id: string;
   ProjectId:{
     type:object
     projectName:string;
+    _id:string;
   };
   freelancerId:{
     type:object
@@ -68,18 +70,34 @@ export function ReviewRequests(): React.JSX.Element {
       console.error(e);
     }
   };
-  const approveUser = async (userId) => {
+
+  const Approve = async (projid:String) => {
     try {
-      const res = await axios.post(`http://localhost:5600/user/approveUser/${userId}`, null, {
-        headers: { Authorization: `Bearer ${token}` },
+  
+      const res = await axios({
+        
+        url: `http://localhost:5600/project/Markcompleted`,
+        method: "post",
+        data:{ProjectId:projid},
+        headers: {
+          Authorization: `Bearer ${token}` // Send token in the Authorization header
+        }
+
+
       });
-      window.alert(res.data.msg);
-     
-      return;
-    } catch (error) {
-      console.error("Error approving user:", error);
+       if(res.status === 200){
+        window.alert(res.data.msg);
+      
+       
+        return;  
+       }
+       }
+     catch (e) {
+      window.alert("ERROR");
+      console.error(e);
     }
   };
+  
 
   useEffect(() => {
 
@@ -103,6 +121,7 @@ export function ReviewRequests(): React.JSX.Element {
               <TableCell>Freelancer Name</TableCell>
               <TableCell>Project Name</TableCell>
               <TableCell>Message</TableCell>
+              <TableCell>Date Sent</TableCell>
               <TableCell>Accept?</TableCell>
             </TableRow>
           </TableHead>
@@ -112,13 +131,13 @@ export function ReviewRequests(): React.JSX.Element {
                 <TableCell>{notification.freelancerId.fullName}</TableCell>
                 <TableCell>{notification.ProjectId.projectName}</TableCell>
                 <TableCell>{notification.message}</TableCell>
-                {/* <TableCell>{dayjs(notification.createdAt).format('MMM D, YYYY')}</TableCell> */}
+                <TableCell>{dayjs(notification.createdAt).format('MMM D, YYYY')}</TableCell>
                 <TableCell>
                   <Button
                     color="primary"
                     size="small"
                     variant="contained"
-                    // onClick={() => approveUser(user._id)}
+                    onClick={() => Approve(notification.ProjectId._id)}
                   >
                     Approve and mark Completed
                   </Button>

@@ -104,6 +104,37 @@ export function Bids(): React.JSX.Element {
 
     const token  = useAppSelector((state) => state.reducers.userReducer.token);
 
+   
+    const SendReviewRequest = async (projid:string) => {
+      try {
+   console.log("review:")
+        const res = await axios({
+          
+          url: "http://localhost:5600/project/Reviewrequest",
+          method: "post",
+          data: {ProjectId:projid},
+          headers: {
+            Authorization: `Bearer ${token}` // Send token in the Authorization header
+          }
+  
+        });
+    window.alert(res.data.msg);
+         if(res.status === 200){
+          
+          window.alert(res.data.msg);
+          return;
+        
+         }
+  
+         }
+       catch (e) {
+        window.alert("ERROR");
+        console.error(e);
+      }
+    };
+
+
+
  const Showmyprojbids = async (type:string) => {
       try {
   
@@ -158,6 +189,8 @@ export function Bids(): React.JSX.Element {
         console.error(e);
       }
     };
+
+
 
   
     const ShowBids = async () => {
@@ -271,14 +304,9 @@ export function Bids(): React.JSX.Element {
 
               <p>
 
-                {/* <Button onClick={()=>handleOpen(projects)} variant="contained">
-                  Edit Project
-                </Button>
-               
-
-                <Button onClick={()=>DeleteProject(projects._id)} variant="contained">
-                  Delete Project
-                </Button> */}
+               {status === 'pending'&&<Button onClick={()=>SendReviewRequest(proj._id)} variant="contained">
+               Send Review Request
+              </Button>}
               </p>
             </Card>
           ))}
