@@ -18,6 +18,7 @@ import dayjs from 'dayjs';
 import axios from 'axios';
 import { useAppSelector } from '@/app/Redux/store';
 import { useEffect } from 'react';
+import RemarksModal from './addRatingandReview';
 
 
 export interface notifications {
@@ -41,6 +42,10 @@ export function ReviewRequests(): React.JSX.Element {
   const token = useAppSelector((state) => state.reducers.userReducer.token);
   const loggedIn = useAppSelector((state) => state.reducers.userReducer.loggedIn);
   const [notifications,setNotifications] = React.useState<notifications[]>([]);
+
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => setOpen(false);
+  const [selectedProject, setSelectedProject] = React.useState<String>("");
   
 
  
@@ -71,6 +76,7 @@ export function ReviewRequests(): React.JSX.Element {
     }
   };
 
+
   const Approve = async (projid:String) => {
     try {
   
@@ -98,6 +104,13 @@ export function ReviewRequests(): React.JSX.Element {
     }
   };
   
+  const Action = function (projid:String) {
+    Approve(projid);
+    setSelectedProject(projid);
+    setOpen(true);
+   
+
+  }
 
   useEffect(() => {
 
@@ -137,7 +150,7 @@ export function ReviewRequests(): React.JSX.Element {
                     color="primary"
                     size="small"
                     variant="contained"
-                    onClick={() => Approve(notification.ProjectId._id)}
+                    onClick={() => Action(notification.ProjectId._id)}
                   >
                     Approve and mark Completed
                   </Button>
@@ -158,6 +171,7 @@ export function ReviewRequests(): React.JSX.Element {
           View all
         </Button>
       </CardActions>
+       {open && <RemarksModal open={open} handleClose={handleClose} projid={selectedProject} />}
     </Card>
   );
 }

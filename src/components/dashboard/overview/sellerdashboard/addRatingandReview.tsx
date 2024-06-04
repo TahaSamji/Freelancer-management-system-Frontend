@@ -7,25 +7,25 @@ import { useAppSelector } from '@/app/Redux/store';
 import { useEffect,useState,ChangeEvent } from 'react';
 
 
-const AddBidModal = ({open ,handleClose,projdata}) => {
+const RemarksModal = ({open ,handleClose,projid}) => {
     const token  = useAppSelector((state) => state.reducers.userReducer.token);
     let error = "";
 
 
-    const [biddata, setBid] = useState({
-      projectId :projdata._id,
-      bidAmount:0,
-      message: "",
+    const [data, setdata] = useState({
+      ProjectId :projid,
+     rating:0,
+      review: "",
      });
 
   useEffect(() => {
     
-    console.log("this is Data",biddata);
-  }, [biddata]);
+    console.log("this is Data",data);
+  }, [data]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setBid((prevData) => ({
+    setdata((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -33,16 +33,16 @@ const AddBidModal = ({open ,handleClose,projdata}) => {
 
 
 
-    const AddBid = async () => {
+    const AddRemarks = async () => {
         try {
 
           
    
           const res = await axios({
             
-            url: "http://localhost:5600/project/Projectbid",
+            url: "http://localhost:5600/rating/GiveRatingReview",
             method: "post",
-            data:biddata,
+            data:data,
             headers: {
               Authorization: `Bearer ${token}` // Send token in the Authorization header
             }
@@ -60,25 +60,10 @@ const AddBidModal = ({open ,handleClose,projdata}) => {
             
           
            }
-           if(res.status === 200){
-            
-            window.alert(res.data.msg);
-            
-            console.log(" data",res.data.data);
-            handleClose();
-            return;
-            
           
-           }
-           
-           
-
-           
             
-    
            }
          catch (e) {
-          window.alert("You already have a bid on this Project , Please Edit your Bid in the Bids Menu");
           console.error(e);
           handleClose();
         }
@@ -110,30 +95,30 @@ const AddBidModal = ({open ,handleClose,projdata}) => {
       
         <form onSubmit={(event) => { event.preventDefault(); }}>
           <Card >
-            <CardHeader subheader="Please Add Bid Details here" title="Add Bid" />
+            <CardHeader subheader="Please Enter Review and Rating for freelancer" title="Remarks" />
             <Divider />
             <CardContent>
       
               <Grid>
                   <Grid md={6} xs={12}>
                   <FormControl fullWidth required>
-                    <InputLabel>Project Bid</InputLabel>
-                    <OutlinedInput type='Number' defaultValue={biddata.bidAmount} label="Project Bid" name="bidAmount" value={biddata.bidAmount} onChange={handleInputChange} />
+                    <InputLabel>Project Rating </InputLabel>
+                    <OutlinedInput type='Number' defaultValue={data.rating} label="Rating" name="rating" value={data.rating} onChange={handleInputChange} />
                   </FormControl>
                 </Grid>
               
                 <Grid  sx={{marginTop:1}} md={12} xs={24}>
                   <FormControl fullWidth>
-                    <InputLabel>Message</InputLabel>
-                    <OutlinedInput label="Description" name="message" type="text" defaultValue={biddata.message} 
-                    value={biddata.message} onChange={handleInputChange}/>
+                    <InputLabel>Review</InputLabel>
+                    <OutlinedInput label="Revire" name="review" type="text" defaultValue={data.review} 
+                    value={data.review} onChange={handleInputChange}/>
                   </FormControl>
                 </Grid>
               </Grid>
             </CardContent>
             <Divider />
             <CardActions sx={{ justifyContent: 'flex-end' }}>
-              <Button onClick={AddBid} variant="contained"> Add Bid</Button>
+              <Button onClick={AddRemarks} variant="contained"> Post Remarks</Button>
             </CardActions>
           </Card>
         </form>
@@ -142,4 +127,4 @@ const AddBidModal = ({open ,handleClose,projdata}) => {
   );
 };
 
-export default AddBidModal;
+export default RemarksModal;
