@@ -48,8 +48,10 @@ export function Projects(): React.JSX.Element {
     const [open2, setOpen2] = React.useState(false);
     const [open3, setOpen3] = React.useState(false);
     const [status, setStatus] = useState<string>("notHired");
-    const [page, setPage] = React.useState(1);
-   
+
+    const [del, setdel] = React.useState(0);
+    
+
   
     const [selectedProject, setSelectedProject] = useState<Project>(); 
 
@@ -115,7 +117,11 @@ export function Projects(): React.JSX.Element {
         });
     
          if(res.data.msg ==="Project deleted successfully"){
-          
+          if(del == 0){
+          setdel(1);
+          }else{
+            setdel(0);
+          }
           window.alert(res.data.msg);
           return;
         
@@ -160,7 +166,9 @@ export function Projects(): React.JSX.Element {
       ShowProjects(status);
     
       
-    }, []);
+    }, [open2,open,open3,del]);
+
+
    
 
 

@@ -15,6 +15,7 @@ import { useAppSelector } from '@/app/Redux/store';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
+import Page from '@/app/dashboard/customers/page';
 
 function noop(): void {
   // do nothing

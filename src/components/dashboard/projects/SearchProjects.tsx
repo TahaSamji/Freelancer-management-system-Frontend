@@ -7,7 +7,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
 import { useState,ChangeEvent,useEffect } from 'react';
-import { Button, Grid, Pagination } from '@mui/material';
+import { Button, Grid, Pagination, Typography } from '@mui/material';
 import { useAppSelector } from '@/app/Redux/store';
 import { Box } from '@mui/system';
 import { Project } from './seller/projects';
@@ -130,10 +130,14 @@ export function SearchProjects(): React.JSX.Element {
           }}>
    
     {project.map((projects) => (
-            <Card key={projects._id}>
-              <h2>{projects.projectName}</h2>
-              <p>{projects.projectDescription}</p>
-              <p>{projects.projectLength}</p>
+            <Card sx={{p:3}} key={projects._id}>
+          <Typography variant="h4" color="text.secondary" alignContent={'center'} justifyContent={'center'} >
+          {projects.projectName}
+              </Typography>
+              <p>Task Description: {projects.projectDescription}</p>
+              <p>Lenght: {projects.projectLength}</p>
+              <p>Price: {`${projects.price}`}</p>
+              <p>Type: {projects.projectType}</p>
 
               {usertype == 'Freelancer' && <Button onClick={()=>handleOpen(projects)} variant="contained">
                   Add Bid

@@ -7,7 +7,6 @@ import axios from "axios";
 import { useState , useEffect ,ChangeEvent,MouseEvent} from 'react';
 
 
-
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,11 +24,8 @@ import { EyeSlash as EyeSlashIcon } from '@phosphor-icons/react/dist/ssr/EyeSlas
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { useAppSelector } from '@/app/Redux/store';
 
 import { paths } from '@/paths';
-import { authClient } from '@/lib/auth/client';
-import { useUser } from '@/hooks/use-user';
 import { loginUser } from '@/app/Redux/reducer/user';
 const schema = zod.object({
   email: zod.string().min(1, { message: 'Email is required' }).email(),
@@ -57,13 +53,12 @@ export function SignInForm(): React.JSX.Element {
 
 
 
-
-  const { checkSession } = useUser();
-
   useEffect(() => {
     
     console.log(udata);
   }, [udata]);
+
+
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -75,7 +70,6 @@ export function SignInForm(): React.JSX.Element {
 
   const [showPassword, setShowPassword] = React.useState<boolean>();
 
-  const [isPending, setIsPending] = React.useState<boolean>(true);
 
 
   const {
@@ -85,27 +79,7 @@ export function SignInForm(): React.JSX.Element {
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
-  const onSubmit = React.useCallback(
-    async (values: Values): Promise<void> => {
-      setIsPending(true);
-
-      const { error } = await authClient.signInWithPassword(values);
-
-      if (error) {
-        setError('root', { type: 'server', message: error });
-        setIsPending(false);
-        return;
-      }
-
-      // Refresh the auth state
-      await checkSession?.();
-
-      // UserProvider, for this case, will not refresh the router
-      // After refresh, GuestGuard will handle the redirect
-      router.refresh();
-    },
-    [checkSession, router, setError]
-  );
+ 
 
 const loginSubmit = async (event) => {
     try {
@@ -121,23 +95,18 @@ const loginSubmit = async (event) => {
         method: "post",
         data: { email: udata.email ,password:udata.password },
       });
-
-     window.alert(res.data.msg);
+        window.alert(res.data.msg);
       if (res.data.msg === "LOGGED IN"){
 
 
-        window.alert(res.data.msg);
         console.log(res.data);
+        getprofile(res.data.token);
+        
      
-     getprofile(res.data.token);
-     
-      router.replace(paths.dashboard.overview); // Redirect to the dashboard
-      // const token = useAppSelector((state) => state.reducers.userReducer.userDetails);
-      // console.log("logged in");
-      // console.log("Value is",token);
       
-      return; // Return to prevent further execution
-    
+      
+      
+      return; 
     }
       
     } catch (e) {
@@ -171,6 +140,7 @@ const loginSubmit = async (event) => {
           })
         )
       
+        router.replace(paths.dashboard.overview); // Redirect to the dashboard
       return; // Return to prevent further execution
     
     }

@@ -269,21 +269,23 @@ export function Bids(): React.JSX.Element {
           }}
         >
           {myBids.map((bid) => (
-            <Card key={bid.bids[0]._id}>
-              <h2>{bid.projectName}</h2>
-              <p>{bid.bids[0].bidAmount}</p>
-              <p>{bid.bids[0].message}</p>
+            <Card sx={{p:3}} key={bid.bids[0]._id}>
+              <Typography variant="h4" color="text.secondary" alignContent={'center'} justifyContent={'center'} >
+              {bid.projectName}
+              </Typography>
+              <p>Proposal: {bid.bids[0].message}</p>
+              <p>Bid Amount: {bid.bids[0].bidAmount}</p>
               <p>
 
-                <Button onClick={()=>handleOpen(bid)} variant="contained">
+                <Button sx={{marginRight:1}} onClick={()=>handleOpen(bid)} variant="contained">
                   Edit Bid
                 </Button>
-               
-
+                
                 <Button onClick={()=>WithdrawBid(bid._id)} variant="contained">
                   Withdraw Bid
                 </Button>
-              </p>
+              
+                </p>
             </Card>
           ))}
           {open && <EditBidModal open={open} handleClose={handleClose} projdata={selectedProject} />}
@@ -299,8 +301,12 @@ export function Bids(): React.JSX.Element {
           }}
         >
           {project.map((proj) => (
-            <Card key={proj._id}>
-              <h2>{proj.projectName}</h2>
+            <Card sx={{p:3}} key={proj._id}>
+              <Typography variant="h4" color="text.secondary" alignContent={'center'} justifyContent={'center'} >
+              {proj.projectName}
+              </Typography>
+              <p>Task Description: {proj.projectDescription}</p>
+              <p>Task Description: {proj.projectDescription}</p>
 
               <p>
 

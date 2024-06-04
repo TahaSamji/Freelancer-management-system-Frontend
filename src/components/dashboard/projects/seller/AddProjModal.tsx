@@ -71,6 +71,9 @@ const AddProject = ({open ,handleClose}) => {
     console.log("this is Data",data);
   }, [data]);
 
+
+
+
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setData((prevData) => ({
