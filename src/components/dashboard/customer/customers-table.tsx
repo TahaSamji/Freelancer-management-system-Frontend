@@ -34,6 +34,7 @@ export function CustomersTable() {
   const [selectedUsers, setSelectedUsers] = React.useState<string[]>([]);
   const token = useAppSelector((state) => state.reducers.userReducer.token);
   const loggedIn = useAppSelector((state) => state.reducers.userReducer.loggedIn);
+  const utype = useAppSelector((state) => state.reducers.userReducer.userDetails.utype);
 
   const getAllProfiles = async () => {
     try {
@@ -130,7 +131,7 @@ export function CustomersTable() {
           },
         }}
         pageSizeOptions={[5, 10]}
-        checkboxSelection
+        checkboxSelection={utype === 'Super Admin' || utype === 'Admin'}
         onRowSelectionModelChange={(newSelection) => {
           setSelectedUsers(newSelection as string[]);
         }}
