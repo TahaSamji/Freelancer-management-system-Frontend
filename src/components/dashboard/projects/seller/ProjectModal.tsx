@@ -127,19 +127,22 @@ const EditProjectModal = ({open ,handleClose,projData}) => {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Edit Project
-        </Typography>
         <form onSubmit={(event) => { event.preventDefault(); }}>
-          <Card>
+          <Card sx={{p:5}}>
             <CardHeader subheader="The information can be edited" title="Edit Project" />
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
-                <Grid md={6} xs={12}>
+                <Grid sx={{marginBottom:1}} md={6} xs={12}>
                   <FormControl fullWidth required>
                     <InputLabel>Project Name</InputLabel>
                     <OutlinedInput defaultValue={data.projectName} label="Project Name" name="projectName" value={data.projectName} onChange={handleInputChange} />
+                  </FormControl>
+                </Grid>
+                <Grid md={6} xs={12}>
+                  <FormControl fullWidth required>
+                    <InputLabel>Project Price</InputLabel>
+                    <OutlinedInput type='Number' defaultValue={data.price} label="Project Price" name="price" value={data.price} onChange={handleInputChange} />
                   </FormControl>
                 </Grid>
                 <FormControl fullWidth>
@@ -152,7 +155,7 @@ const EditProjectModal = ({open ,handleClose,projData}) => {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl fullWidth>
+              <FormControl sx={{marginTop:1}} fullWidth>
                 <InputLabel >Skill Level</InputLabel>
                 <Select onChange={handleSelectChange} defaultValue={data.skillLevel} label="Skill Level" name="skillLevel" variant="outlined" value={data.skillLevel} >
                   {skills.map((option) => (
@@ -162,7 +165,7 @@ const EditProjectModal = ({open ,handleClose,projData}) => {
                   ))}
                 </Select>
               </FormControl>
-                <FormControl fullWidth>
+                <FormControl  sx={{marginTop:1}} fullWidth>
                 <InputLabel >Project Length</InputLabel>
                 <Select onChange={handleSelectChange} defaultValue={data.projectLength} label="Project Length" name="projectLength" variant="outlined" value={data.projectLength} >
                   {lengths.map((option) => (
@@ -172,7 +175,7 @@ const EditProjectModal = ({open ,handleClose,projData}) => {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl fullWidth>
+              <FormControl sx={{marginTop:1}} fullWidth>
                 <InputLabel >Project Status</InputLabel>
                 <Select onChange={handleSelectChange} defaultValue={data.status} label="Project Status" name="status" variant="outlined" value={data.status} >
                   {Allstatus.map((option) => (
@@ -182,14 +185,8 @@ const EditProjectModal = ({open ,handleClose,projData}) => {
                   ))}
                 </Select>
               </FormControl>
-              <Grid md={6} xs={12}>
-                  <FormControl fullWidth required>
-                    <InputLabel>Project Price</InputLabel>
-                    <OutlinedInput type='Number' defaultValue={data.price} label="Project Price" name="price" value={data.price} onChange={handleInputChange} />
-                  </FormControl>
-                </Grid>
               
-                <Grid md={12} xs={24}>
+                <Grid sx={{marginTop:1}} md={12} xs={24}>
                   <FormControl fullWidth>
                     <InputLabel>Project Description</InputLabel>
                     <OutlinedInput label="Description" name="projectDescription" type="text" defaultValue={data.projectDescription} 

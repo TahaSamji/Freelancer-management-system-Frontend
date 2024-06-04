@@ -22,6 +22,7 @@ import { paths } from '@/paths';
 import { authClient } from '@/lib/auth/client';
 import { useUser } from '@/hooks/use-user';
 import { useEffect,useState,ChangeEvent } from 'react';
+import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
 const schema = zod.object({
   fullName: zod.string().min(1, { message: 'Name is required' }),
@@ -59,6 +60,14 @@ export function SignUpForm(): React.JSX.Element {
     }));
   };
 
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
+    const { name, value } = event.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const {
     register,
     control,
@@ -67,28 +76,6 @@ export function SignUpForm(): React.JSX.Element {
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
-
-  // const onSubmit = React.useCallback(
-  //   async (values: Values): Promise<void> => {
-  //     setIsPending(true);
-
-  //     const { error } = await authClient.signUp(values);
-
-  //     if (error) {
-  //       setError('root', { type: 'server', message: error });
-  //       setIsPending(false);
-  //       return;
-  //     }
-
-  //     // Refresh the auth state
-  //     await checkSession?.();
-
-  //     // UserProvider, for this case, will not refresh the router
-  //     // After refresh, GuestGuard will handle the redirect
-  //     router.refresh();
-  //   },
-  //   [checkSession, router, setError]
-  // );
   
   const SignupSubmit = async (data : Values) => {
   
@@ -150,17 +137,27 @@ export function SignUpForm(): React.JSX.Element {
               </FormControl>
             )}
           />
-            <Controller
-            control={control}
-            name="utype"
-            render={({ field }) => (
-              <FormControl error={Boolean(errors.password)}>
-                <InputLabel>User Type</InputLabel>
-                <OutlinedInput  {...register('utype')} label="Role" type="text"  value={data.utype} onChange={handleInputChange}  />
-                {errors.utype? <FormHelperText>{errors.utype.message}</FormHelperText> : null}
-              </FormControl>
-            )}
-          />
+          <Controller
+  control={control}
+  name="utype"
+  render={({ field }) => (
+    <FormControl error={Boolean(errors.password)}>
+      <InputLabel>User Type</InputLabel>
+      <Select
+        {...register('utype')}
+        label="Role"
+        value={data.utype} 
+        onChange={handleSelectChange} 
+      >
+        
+        <MenuItem value="Seller">Seller</MenuItem>
+        <MenuItem value="Freelancer">FreeLancer</MenuItem>
+       
+      </Select>
+      {errors.utype ? <FormHelperText>{errors.utype.message}</FormHelperText> : null}
+    </FormControl>
+  )}
+/>
           
           <Controller
             control={control}

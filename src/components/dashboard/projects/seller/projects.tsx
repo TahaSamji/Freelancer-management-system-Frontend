@@ -25,6 +25,11 @@ export interface Project {
     sellerId:string;
     projectName: string;
     projectDescription: string;
+    freelancerId:{
+      _id:string;
+      fullName:string;
+      description:string;
+    };
     projectLength: string;
     projectType: string;
     skillTags:[string];
@@ -77,10 +82,7 @@ export function Projects(): React.JSX.Element {
       ShowProjects(newValue);
 
     };
-    // const handlepageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    //   setPage(value);
-    //   ShowProjects(value);
-    // };
+
     
    
     const handleClose = () => setOpen(false);
@@ -103,7 +105,7 @@ export function Projects(): React.JSX.Element {
     const token  = useAppSelector((state) => state.reducers.userReducer.token);
 
     
-    const DeleteProject = async (projid) => {
+    const DeleteProject = async (projid:string) => {
       try {
  
         const res = await axios({
@@ -168,6 +170,10 @@ export function Projects(): React.JSX.Element {
       
     }, [open2,open,open3,del]);
 
+    
+
+
+
 
    
 
@@ -201,25 +207,31 @@ export function Projects(): React.JSX.Element {
           }}
         >
           {project.map((projects) => (
-            <Card key={projects._id}>
-              <h2>{projects.projectName}</h2>
-              <p>{projects.projectDescription}</p>
-              <p>{projects.projectLength}</p>
+            <Card sx={{p:3, justifyContent:'center'}} key={projects._id}>
+              <Typography variant="h4" color="text.secondary" alignContent={'center'} justifyContent={'center'} >
+              {projects.projectName}
+              </Typography>
+
+             {/* {((status === 'pending') || (status === 'completed') )  && <p>FreeLancer Assigned: {projects.freelancerId.fullName}</p>} */}
+              <p>Task Description: {projects.projectDescription}</p>
+              <p>Length: {projects.projectLength}</p>
+
               <p>
 
-                <Button onClick={()=>handleOpen(projects)} variant="contained">
+                <Button sx={{marginRight:1}} onClick={()=>handleOpen(projects)} variant="contained">
                   Edit Project
                 </Button>
                
 
-                <Button onClick={()=>DeleteProject(projects._id)} variant="contained">
+                <Button sx={{marginRight:1}} onClick={()=>DeleteProject(projects._id)} variant="contained">
                   Delete Project
                 </Button>
-
-                <Button onClick={()=>handleOpen3(projects)} variant="contained">
+                
+                
+                <Button  onClick={()=>handleOpen3(projects)} variant="contained">
                   View Bids
                 </Button>
-              </p>
+                </p>
             </Card>
           ))}
           {open && <EditProjectModal open={open} handleClose={handleClose} projData={selectedProject} />}

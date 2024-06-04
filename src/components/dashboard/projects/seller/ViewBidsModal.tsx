@@ -146,10 +146,13 @@ const ViewBidProjectModal = ({open ,handleClose,projdata}) => {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Here are the bids for Project {projdata.projectName}
         </Typography>
-        <button onClick={()=>handleapi()}>Show Bids</button>
+        <Button onClick={()=>handleapi()  } variant="contained" >Show Bids</Button>
         {data.map((bids) => (
-            <Card key={bids._id}>
-              <p>Full Name: {bids.freelancerId.fullName}</p>
+            <Card sx={{p:3}}  key={bids._id}>
+             
+              <Typography variant="h5" color="text.secondary" alignContent={'center'} justifyContent={'center'} >
+              Full Name: {bids.freelancerId.fullName}
+              </Typography>
               <p>Email: {bids.freelancerId.email}</p>
               <p>BidAmount: {bids.bidAmount}</p>
               <p>Message: {bids.message} </p>

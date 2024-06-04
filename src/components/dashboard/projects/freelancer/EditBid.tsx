@@ -94,12 +94,9 @@ const EditBidModal = ({open ,handleClose,projdata}) => {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Edit Bid
-        </Typography>
         <form onSubmit={(event) => { event.preventDefault(); }}>
           <Card>
-            <CardHeader subheader="The information can be edited" title="Edit Bid" />
+            <CardHeader subheader="You Can Edit your Bid here" title="Edit Bid" />
             <Divider />
             <CardContent>
                 <Grid>
@@ -111,7 +108,7 @@ const EditBidModal = ({open ,handleClose,projdata}) => {
                   </FormControl>
                 </Grid>
               
-                <Grid md={12} xs={24}>
+                <Grid sx={{marginTop:1}} md={12} xs={24}>
                   <FormControl fullWidth>
                     <InputLabel>Message</InputLabel>
                     <OutlinedInput label="Message" name="message" type="text" defaultValue={updatedbid.message}  

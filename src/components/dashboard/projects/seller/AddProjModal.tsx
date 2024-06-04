@@ -140,12 +140,9 @@ const AddProject = ({open ,handleClose}) => {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Add Project
-        </Typography>
         <form onSubmit={(event) => { event.preventDefault(); }}>
           <Card >
-            <CardHeader subheader="The information can be edited" title="Edit Project" />
+            <CardHeader subheader="The information can be edited" title="Add Project" />
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
@@ -155,7 +152,7 @@ const AddProject = ({open ,handleClose}) => {
                     <OutlinedInput defaultValue={data.projectName} label="Project Name" name="projectName" value={data.projectName} onChange={handleInputChange} />
                   </FormControl>
                 </Grid>
-                <FormControl fullWidth>
+                <FormControl sx={{marginTop:1}} fullWidth>
                 <InputLabel >Project Type</InputLabel>
                 <Select onChange={handleSelectChange} defaultValue={data.projectType} label="Project Type" name="projectType" variant="outlined" value={data.projectType} >
                   {projtype.map((option) => (
@@ -165,7 +162,7 @@ const AddProject = ({open ,handleClose}) => {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl fullWidth>
+              <FormControl sx={{marginTop:1}} fullWidth>
                 <InputLabel >Skill Level</InputLabel>
                 <Select onChange={handleSelectChange} defaultValue={data.skillLevel} label="Skill Level" name="skillLevel" variant="outlined" value={data.skillLevel} >
                   {skills.map((option) => (
@@ -175,7 +172,7 @@ const AddProject = ({open ,handleClose}) => {
                   ))}
                 </Select>
               </FormControl>
-                <FormControl fullWidth>
+                <FormControl  sx={{marginTop:1}} fullWidth>
                 <InputLabel >Project Length</InputLabel>
                 <Select onChange={handleSelectChange} defaultValue={data.projectLength} label="Project Length" name="projectLength" variant="outlined" value={data.projectLength} >
                   {lengths.map((option) => (
@@ -185,14 +182,14 @@ const AddProject = ({open ,handleClose}) => {
                   ))}
                 </Select>
               </FormControl>
-              <Grid md={6} xs={12}>
-                  <FormControl fullWidth required>
+              <Grid sx={{marginTop:1}} md={6} xs={12}>
+                  <FormControl fullWidth   required>
                     <InputLabel>Project Price</InputLabel>
                     <OutlinedInput type='Number' defaultValue={data.price} label="Project Price" name="price" value={data.price} onChange={handleInputChange} />
                   </FormControl>
                 </Grid>
               
-                <Grid md={12} xs={24}>
+                <Grid sx={{marginTop:1}}  md={12} xs={24}>
                   <FormControl fullWidth>
                     <InputLabel>Project Description</InputLabel>
                     <OutlinedInput label="Description" name="projectDescription" type="text" defaultValue={data.projectDescription} 

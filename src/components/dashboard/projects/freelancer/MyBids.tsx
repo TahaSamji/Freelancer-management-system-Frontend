@@ -21,7 +21,12 @@ import { WindowsLogo } from "@phosphor-icons/react";
  
 export interface Project {
     _id: string;
-    sellerId:string;
+    sellerId:{
+      type:object;
+      fullName:string;
+      _id:string;
+      description:string;
+    };
     projectName: string;
     projectDescription: string;
     projectLength: string;
@@ -305,8 +310,10 @@ export function Bids(): React.JSX.Element {
               <Typography variant="h4" color="text.secondary" alignContent={'center'} justifyContent={'center'} >
               {proj.projectName}
               </Typography>
+              <p>Seller Name: {proj.sellerId.fullName}</p>
               <p>Task Description: {proj.projectDescription}</p>
-              <p>Task Description: {proj.projectDescription}</p>
+              <p>Length: {proj.projectLength}</p>
+
 
               <p>
 

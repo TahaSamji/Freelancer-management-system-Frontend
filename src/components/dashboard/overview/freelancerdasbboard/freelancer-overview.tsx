@@ -11,11 +11,12 @@ import { InactiveUsers } from '@/components/dashboard/overview/latest-orders';
 import { LatestProducts } from '@/components/dashboard/overview/latest-products';
 import { Sales } from '@/components/dashboard/overview/sales';
 import { TasksProgress } from '@/components/dashboard/overview/tasks-progress';
-import { TotalCustomers } from '@/components/dashboard/overview/total-customers';
 import { TotalProfit } from '@/components/dashboard/overview/total-profit';
 import { Traffic } from '@/components/dashboard/overview/traffic';
 import { CustomersTable } from '@/components/dashboard/customer/customers-table';
 import { ReviewRequests } from '@/components/dashboard/overview/sellerdashboard/review-request-table';
+import { TotalPendingProj } from '../total-pending-proj';
+import { TotalCompletedProj } from '../total-completed-proj';
 
 export const metadata = { title: `Overview | Dashboard | ${config.site.name}` } satisfies Metadata;
 
@@ -27,10 +28,11 @@ export  function Freelancerdashboard(): React.JSX.Element {
         <Budget diff={12} trend="up" sx={{ height: '100%' }} value="$24k" />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
-        <TotalCustomers diff={16} trend="down" sx={{ height: '100%' }} value="1.6k" />
+        <TotalPendingProj  sx={{ height: '100%' }}  />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
-        <TasksProgress sx={{ height: '100%' }} value={75.5} />
+        {/* <TasksProgress sx={{ height: '100%' }} value={75.5} /> */}
+        <TotalCompletedProj sx={{ height: '100%' }} />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
         <TotalProfit sx={{ height: '100%' }} value="$15k" />

@@ -109,12 +109,10 @@ const AddBidModal = ({open ,handleClose,projdata}) => {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Add Bid on this Project
-        </Typography>
+      
         <form onSubmit={(event) => { event.preventDefault(); }}>
           <Card >
-            <CardHeader subheader="The information can be edited" title="Add Bid" />
+            <CardHeader subheader="Please Add Bid Details here" title="Add Bid" />
             <Divider />
             <CardContent>
       
@@ -126,7 +124,7 @@ const AddBidModal = ({open ,handleClose,projdata}) => {
                   </FormControl>
                 </Grid>
               
-                <Grid md={12} xs={24}>
+                <Grid  sx={{marginTop:1}} md={12} xs={24}>
                   <FormControl fullWidth>
                     <InputLabel>Message</InputLabel>
                     <OutlinedInput label="Description" name="message" type="text" defaultValue={biddata.message} 

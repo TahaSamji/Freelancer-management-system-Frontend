@@ -26,8 +26,6 @@ export function SearchProjects(): React.JSX.Element {
    Search : ""
   });
   const [project, setproject] = useState<Project[]>([]);
-  const [num, setnum] = useState<number>(1);
-   let totalpages = 0;
 
   const [open, setOpen] = React.useState(false);
 
@@ -80,9 +78,6 @@ export function SearchProjects(): React.JSX.Element {
       });
      
       if (res.status === 200){
-
-
-        window.alert("yess");
         setproject(res.data.data);
 
         
@@ -117,7 +112,7 @@ export function SearchProjects(): React.JSX.Element {
         sx={{ maxWidth: '500px' }}
       />
      
-       <Button onClick={()=>Searchproj(page)} startIcon={<MagnifyingGlassIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
+       <Button sx={{marginLeft:2}} onClick={()=>Searchproj(page)} startIcon={<MagnifyingGlassIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
             Search
           </Button>
           
@@ -148,7 +143,7 @@ export function SearchProjects(): React.JSX.Element {
               {open && <AddBidModal open={open} handleClose={handleClose} projdata={selectedProject} />}
     
     </Box>
-    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center' ,marginTop:3}}>
         <Pagination count={10} size="small" page={page}  onChange={handlepageChange} />
       </Box>
     </Box>
