@@ -16,9 +16,13 @@ export function Main() {
                 <AddAdmin />
             </Stack>
             :
+            (utype === "Admin" ?
             <Stack direction="row" spacing={2}>
                 <AddUser />
             </Stack>
+            :
+            null
+            )
             }
             <CustomersTable />
         </Stack>
