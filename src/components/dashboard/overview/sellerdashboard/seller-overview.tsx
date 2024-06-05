@@ -17,10 +17,13 @@ import { CustomersTable } from '@/components/dashboard/customer/customers-table'
 import { ReviewRequests } from '@/components/dashboard/overview/sellerdashboard/review-request-table';
 import { TotalPendingProj } from '../total-pending-proj';
 import { TotalCompletedProj } from '../total-completed-proj';
+import { useAppSelector } from '@/app/Redux/store';
 
 export const metadata = { title: `Overview | Dashboard | ${config.site.name}` } satisfies Metadata;
 
 export  function Sellerdashboard(): React.JSX.Element {
+  const token = useAppSelector((state) => state.reducers.userReducer.token);
+  const utype = useAppSelector((state) => state.reducers.userReducer.userDetails.utype);
   return (
     <div>
     <Grid container spacing={3}>
@@ -32,8 +35,10 @@ export  function Sellerdashboard(): React.JSX.Element {
         <TotalCompletedProj sx={{ height: '100%' }} />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
-        <TotalProfit sx={{ height: '100%' }} value="$15k" />
+        {/* <TasksProgress sx={{ height: '100%' }} value={75.5} /> */}
+        <Budget sx={{ height: '100%' }} token={token} utype={utype}/>
       </Grid>
+    
       <Grid lg={11} xs={12}>
        
        <ReviewRequests/>
