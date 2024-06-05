@@ -32,6 +32,10 @@ export  function Sellerdashboard(): React.JSX.Element {
         <TotalCompletedProj sx={{ height: '100%' }} />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
+        {/* <TasksProgress sx={{ height: '100%' }} value={75.5} /> */}
+        <Budget sx={{ height: '100%' }} />
+      </Grid>
+      <Grid lg={3} sm={6} xs={12}>
         <TotalProfit sx={{ height: '100%' }} value="$15k" />
       </Grid>
       <Grid lg={8} xs={12}>

@@ -33,6 +33,10 @@ export  function Freelancerdashboard(): React.JSX.Element {
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
         {/* <TasksProgress sx={{ height: '100%' }} value={75.5} /> */}
+        <Budget sx={{ height: '100%' }} />
+      </Grid>
+      <Grid lg={3} sm={6} xs={12}>
+        {/* <TasksProgress sx={{ height: '100%' }} value={75.5} /> */}
         <TotalCompletedProj sx={{ height: '100%' }} />
       </Grid>
       <Grid lg={8} xs={12}>
