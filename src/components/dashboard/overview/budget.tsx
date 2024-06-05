@@ -12,10 +12,10 @@ import { useAppSelector } from '@/app/Redux/store';
 import axios from 'axios';
 
 
-export function Budget({ sx }): React.JSX.Element {
+export function Budget({ sx, token, utype }): React.JSX.Element {
 
   const [value, setValue] = React.useState<string>('0');
-  const token = useAppSelector((state) => state.reducers.userReducer.userDetails.utype);
+  // const token = useAppSelector((state) => state.reducers.userReducer.userDetails.utype);
 
   const getTotalSales = async () => {
     try {
@@ -25,8 +25,10 @@ export function Budget({ sx }): React.JSX.Element {
         method: "get",
         headers: { Authorization: `Bearer ${token}` }
       });
-      console.log(res.data.totalSales)
-      setValue(res.data.totalSales.toString());
+      console.log("Response data:", res.data);
+      if (res.data && res.data.totalSales !== undefined) {
+        setValue(res.data.totalSales.toString());
+      }
     } catch (error) {
       console.error("Failed to fetch total sales:", error);
     }
@@ -42,9 +44,15 @@ export function Budget({ sx }): React.JSX.Element {
         <Stack spacing={3}>
           <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={3}>
             <Stack spacing={1}>
+              {utype === "Super Admin" || utype === "Admin" || utype === "Freelancer" ?
               <Typography color="text.secondary" variant="overline">
-                Total Sales
+              Total Sales
               </Typography>
+              :
+              <Typography color="text.secondary" variant="overline">
+              Total Amount Spent
+              </Typography>
+            }
               <Typography variant="h4">{value}</Typography>
             </Stack>
             <Avatar sx={{ backgroundColor: 'var(--mui-palette-primary-main)', height: '56px', width: '56px' }}>
