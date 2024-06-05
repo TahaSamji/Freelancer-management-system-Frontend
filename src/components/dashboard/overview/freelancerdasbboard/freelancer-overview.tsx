@@ -18,10 +18,13 @@ import { ReviewRequests } from '@/components/dashboard/overview/sellerdashboard/
 import { TotalPendingProj } from '../total-pending-proj';
 import { TotalCompletedProj } from '../total-completed-proj';
 import { AverageRating } from './average-rating';
+import { useAppSelector } from '@/app/Redux/store';
 
 export const metadata = { title: `Overview | Dashboard | ${config.site.name}` } satisfies Metadata;
 
 export  function Freelancerdashboard(): React.JSX.Element {
+  const token = useAppSelector((state) => state.reducers.userReducer.token);
+  const utype = useAppSelector((state) => state.reducers.userReducer.userDetails.utype);
   return (
     <div>
     <Grid container spacing={3}>
@@ -30,6 +33,10 @@ export  function Freelancerdashboard(): React.JSX.Element {
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
         <TotalPendingProj  sx={{ height: '100%' }}  />
+      </Grid>
+      <Grid lg={3} sm={6} xs={12}>
+        {/* <TasksProgress sx={{ height: '100%' }} value={75.5} /> */}
+        <Budget sx={{ height: '100%' }} token={token} utype={utype}/>
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
         {/* <TasksProgress sx={{ height: '100%' }} value={75.5} /> */}

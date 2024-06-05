@@ -8,17 +8,35 @@ import Typography from '@mui/material/Typography';
 import { ArrowDown as ArrowDownIcon } from '@phosphor-icons/react/dist/ssr/ArrowDown';
 import { ArrowUp as ArrowUpIcon } from '@phosphor-icons/react/dist/ssr/ArrowUp';
 import { CurrencyDollar as CurrencyDollarIcon } from '@phosphor-icons/react/dist/ssr/CurrencyDollar';
+import { useAppSelector } from '@/app/Redux/store';
+import axios from 'axios';
 
-export interface BudgetProps {
-  diff?: number;
-  trend: 'up' | 'down';
-  sx?: SxProps;
-  value: string;
-}
 
-export function Budget({ diff, trend, sx, value }: BudgetProps): React.JSX.Element {
-  const TrendIcon = trend === 'up' ? ArrowUpIcon : ArrowDownIcon;
-  const trendColor = trend === 'up' ? 'var(--mui-palette-success-main)' : 'var(--mui-palette-error-main)';
+export function Budget({ sx, token, utype }): React.JSX.Element {
+
+  const [value, setValue] = React.useState<string>('0');
+  // const token = useAppSelector((state) => state.reducers.userReducer.userDetails.utype);
+
+  const getTotalSales = async () => {
+    try {
+      console.log("hello")
+      const res = await axios({
+        url: "http://localhost:5600/project/getTotalSales",
+        method: "get",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      console.log("Response data:", res.data);
+      if (res.data && res.data.totalSales !== undefined) {
+        setValue(res.data.totalSales.toString());
+      }
+    } catch (error) {
+      console.error("Failed to fetch total sales:", error);
+    }
+  };
+
+  React.useEffect(() => {
+    getTotalSales();
+  },[]);
 
   return (
     <Card sx={sx}>
@@ -26,28 +44,21 @@ export function Budget({ diff, trend, sx, value }: BudgetProps): React.JSX.Eleme
         <Stack spacing={3}>
           <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={3}>
             <Stack spacing={1}>
+              {utype === "Super Admin" || utype === "Admin" || utype === "Freelancer" ?
               <Typography color="text.secondary" variant="overline">
-                Budget
+              Total Sales
               </Typography>
+              :
+              <Typography color="text.secondary" variant="overline">
+              Total Amount Spent
+              </Typography>
+            }
               <Typography variant="h4">{value}</Typography>
             </Stack>
             <Avatar sx={{ backgroundColor: 'var(--mui-palette-primary-main)', height: '56px', width: '56px' }}>
               <CurrencyDollarIcon fontSize="var(--icon-fontSize-lg)" />
             </Avatar>
           </Stack>
-          {diff ? (
-            <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-              <Stack sx={{ alignItems: 'center' }} direction="row" spacing={0.5}>
-                <TrendIcon color={trendColor} fontSize="var(--icon-fontSize-md)" />
-                <Typography color={trendColor} variant="body2">
-                  {diff}%
-                </Typography>
-              </Stack>
-              <Typography color="text.secondary" variant="caption">
-                Since last month
-              </Typography>
-            </Stack>
-          ) : null}
         </Stack>
       </CardContent>
     </Card>

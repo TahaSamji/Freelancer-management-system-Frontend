@@ -60,7 +60,7 @@ export function CompletedProjects({ sx }): React.JSX.Element {
     
    ShowProjects();
    console.log(projects);
-  }, []);
+  }, [projects]);
 
   const ShowProjects = async () => {
     try {
