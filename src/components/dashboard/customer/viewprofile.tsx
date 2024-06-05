@@ -72,7 +72,19 @@ export function ViewProfile({open,handleClose,userid}): React.JSX.Element {
 
  
   
-  
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 800,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    display :'flex',
+    padding : '20px'
+  };
 
  
 
@@ -83,14 +95,14 @@ export function ViewProfile({open,handleClose,userid}): React.JSX.Element {
     aria-labelledby="modal-modal-title"
     aria-describedby="modal-modal-description"
   >
-    <Box>
+    <Box sx={style}>
     <form
       onSubmit={(event) => {
         event.preventDefault();
       }}
     >
       <Card>
-        <CardHeader subheader="The information can be edited" title="Profile" />
+        <CardHeader subheader="The information can not be edited" title="Profile" />
         <Divider />
         <CardContent>
           <Grid container spacing={3}>

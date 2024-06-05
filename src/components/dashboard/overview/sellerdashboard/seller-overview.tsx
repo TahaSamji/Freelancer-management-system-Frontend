@@ -34,18 +34,18 @@ export  function Sellerdashboard(): React.JSX.Element {
       <Grid lg={3} sm={6} xs={12}>
         <TotalProfit sx={{ height: '100%' }} value="$15k" />
       </Grid>
-      <Grid lg={8} xs={12}>
+      <Grid lg={11} xs={12}>
        
        <ReviewRequests/>
       </Grid>
       {/* <Grid lg={4} md={6} xs={12}>
         <Traffic chartSeries={[63, 15, 22]} labels={['Desktop', 'Tablet', 'Phone']} sx={{ height: '100%' }} />
       </Grid> */}
-      <Grid lg={4} md={6} xs={12}>
+      {/* <Grid lg={4} md={6} xs={12}>
         <CompletedProjects
           sx={{ height: '100%' }}
         />
-      </Grid>
+      </Grid> */}
     </Grid>
     </div>
   );

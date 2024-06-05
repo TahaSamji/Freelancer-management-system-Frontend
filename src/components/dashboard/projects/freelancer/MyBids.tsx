@@ -312,7 +312,8 @@ export function Bids(): React.JSX.Element {
               </Typography>
               <p>Seller Name: {proj.sellerId.fullName}</p>
               <p>Task Description: {proj.projectDescription}</p>
-              <p>Length: {proj.projectLength}</p>
+              {status === 'completed' && <p>Review: {`${proj.review}`}</p>}
+              {status === 'completed' && <p>Rating: {`${proj.rating}`}</p>}
 
 
               <p>
