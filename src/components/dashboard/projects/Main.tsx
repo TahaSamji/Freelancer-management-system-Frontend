@@ -9,7 +9,7 @@ export function Main(): React.JSX.Element {
     const utype = useAppSelector((state)=>state.reducers.userReducer.userDetails.utype);
     console.log(utype);
     return (<div>
-        {utype == 'Seller'? <Projects/>: <Bids/>}
+        {utype == 'Seller'? <Projects/>: (utype ==='Admin' || utype==='Super Admin')? null :<Bids/>}
     </div>);
 }
  

@@ -68,7 +68,7 @@ const EditBidModal = ({open ,handleClose,projdata}) => {
     
            }
          catch (e) {
-          window.alert("ERROR");
+          
           console.error(e);
         }
       };

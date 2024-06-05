@@ -1,13 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Checkbox from '@mui/material/Checkbox';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Button, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -16,10 +9,9 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import Page from '@/app/dashboard/customers/page';
+import { UserDetails } from '../account/account-info';
+import { ViewProfile } from './viewprofile';
 
-function noop(): void {
-  // do nothing
-}
 
 export interface User {
   id: string;
@@ -35,6 +27,11 @@ export function CustomersTable() {
   const token = useAppSelector((state) => state.reducers.userReducer.token);
   const loggedIn = useAppSelector((state) => state.reducers.userReducer.loggedIn);
   const utype = useAppSelector((state) => state.reducers.userReducer.userDetails.utype);
+  const [profile, setprofile] = React.useState<string>("");
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => setOpen(false);
+
+
 
   const getAllProfiles = async () => {
     try {
@@ -60,19 +57,8 @@ export function CustomersTable() {
       console.error(error);
     }
   }
+ 
 
-  const viewProfile = async (userId: string) => {
-    try {
-      const res = await axios({
-        url: `http://localhost:5600/user/ShowProfile/${userId}`,
-        method: "get",
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      console.log(res.data); // Handle the response as needed
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   const deleteUsers = async () => {
     try {
@@ -89,6 +75,11 @@ export function CustomersTable() {
     }
   }
 
+  const action = function(id:string){
+setprofile(id);
+setOpen(true);
+
+  }
   useEffect(() => {
     if (loggedIn && token !== "") getAllProfiles();
   }, [loggedIn]);
@@ -112,7 +103,7 @@ export function CustomersTable() {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => viewProfile(params.row.id)}
+          onClick={() => action(params.row.id)}
         >
           View Profile
         </Button>
@@ -141,6 +132,7 @@ export function CustomersTable() {
           <DeleteIcon />
         </IconButton>
       )}
+      {open && <ViewProfile open={open} handleClose={handleClose} userid={profile} />}
     </div>
   );
 }

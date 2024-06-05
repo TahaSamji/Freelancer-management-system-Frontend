@@ -11,7 +11,6 @@ import { Button, Grid, Pagination, Typography } from '@mui/material';
 import { useAppSelector } from '@/app/Redux/store';
 import { Box } from '@mui/system';
 import { Project } from './seller/projects';
-import AddBid from './freelancer/AddBidModal';
 import AddBidModal from './freelancer/AddBidModal';
 
 

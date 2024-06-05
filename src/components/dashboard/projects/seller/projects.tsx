@@ -131,7 +131,7 @@ export function Projects(): React.JSX.Element {
   
          }
        catch (e) {
-        window.alert("ERROR");
+        
         console.error(e);
       }
     };
@@ -157,7 +157,7 @@ export function Projects(): React.JSX.Element {
           return;
          }
        catch (e) {
-        window.alert("ERROR");
+       
         console.error(e);
       }
     };
