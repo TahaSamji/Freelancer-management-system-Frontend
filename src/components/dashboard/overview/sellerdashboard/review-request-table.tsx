@@ -71,7 +71,7 @@ export function ReviewRequests(): React.JSX.Element {
        }
        }
      catch (e) {
-      window.alert("ERROR");
+     
       console.error(e);
     }
   };
@@ -99,7 +99,6 @@ export function ReviewRequests(): React.JSX.Element {
        }
        }
      catch (e) {
-      window.alert("ERROR");
       console.error(e);
     }
   };

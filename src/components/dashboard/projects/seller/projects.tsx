@@ -22,7 +22,12 @@ import ViewBidProjectModal from "./ViewBidsModal";
  
 export interface Project {
     _id: string;
-    sellerId:string;
+    sellerId:{
+      _id:string;
+      fullName:string;
+      description:string;
+
+    };
     projectName: string;
     projectDescription: string;
     freelancerId:{
@@ -131,7 +136,7 @@ export function Projects(): React.JSX.Element {
   
          }
        catch (e) {
-        window.alert("ERROR");
+        
         console.error(e);
       }
     };
@@ -157,7 +162,7 @@ export function Projects(): React.JSX.Element {
           return;
          }
        catch (e) {
-        window.alert("ERROR");
+       
         console.error(e);
       }
     };
@@ -215,7 +220,8 @@ export function Projects(): React.JSX.Element {
              {/* {((status === 'pending') || (status === 'completed') )  && <p>FreeLancer Assigned: {projects.freelancerId.fullName}</p>} */}
               <p>Task Description: {projects.projectDescription}</p>
               <p>Length: {projects.projectLength}</p>
-
+              {status === 'completed' && <p>Review: {`${projects.review}`}</p>}
+              {status === 'completed' && <p>Rating: {`${projects.rating}`}</p>}
               <p>
 
                 <Button sx={{marginRight:1}} onClick={()=>handleOpen(projects)} variant="contained">
@@ -223,14 +229,14 @@ export function Projects(): React.JSX.Element {
                 </Button>
                
 
-                <Button sx={{marginRight:1}} onClick={()=>DeleteProject(projects._id)} variant="contained">
+                {status ==='notHired' && <Button sx={{marginRight:1}} onClick={()=>DeleteProject(projects._id)} variant="contained">
                   Delete Project
-                </Button>
+                </Button>}
                 
                 
-                <Button  onClick={()=>handleOpen3(projects)} variant="contained">
+                {status !=='completed' &&<Button  onClick={()=>handleOpen3(projects)} variant="contained">
                   View Bids
-                </Button>
+                </Button>}
                 </p>
             </Card>
           ))}

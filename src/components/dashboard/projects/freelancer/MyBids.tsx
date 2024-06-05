@@ -112,7 +112,7 @@ export function Bids(): React.JSX.Element {
    
     const SendReviewRequest = async (projid:string) => {
       try {
-   console.log("review:")
+  
         const res = await axios({
           
           url: "http://localhost:5600/project/Reviewrequest",
@@ -133,7 +133,7 @@ export function Bids(): React.JSX.Element {
   
          }
        catch (e) {
-        window.alert("ERROR");
+        
         console.error(e);
       }
     };
@@ -220,7 +220,7 @@ export function Bids(): React.JSX.Element {
           return;
          }
        catch (e) {
-        window.alert("ERROR");
+       
         console.error(e);
       }
     };
@@ -312,7 +312,8 @@ export function Bids(): React.JSX.Element {
               </Typography>
               <p>Seller Name: {proj.sellerId.fullName}</p>
               <p>Task Description: {proj.projectDescription}</p>
-              <p>Length: {proj.projectLength}</p>
+              {status === 'completed' && <p>Review: {`${proj.review}`}</p>}
+              {status === 'completed' && <p>Rating: {`${proj.rating}`}</p>}
 
 
               <p>

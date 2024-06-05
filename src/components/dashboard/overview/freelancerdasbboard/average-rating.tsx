@@ -51,7 +51,7 @@ React.useEffect(() => {
        }
        }
      catch (e) {
-      window.alert("ERROR");
+     
       console.error(e);
     }
   };

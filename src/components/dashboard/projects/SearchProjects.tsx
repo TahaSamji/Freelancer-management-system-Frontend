@@ -11,8 +11,8 @@ import { Button, Grid, Pagination, Typography } from '@mui/material';
 import { useAppSelector } from '@/app/Redux/store';
 import { Box } from '@mui/system';
 import { Project } from './seller/projects';
-import AddBid from './freelancer/AddBidModal';
 import AddBidModal from './freelancer/AddBidModal';
+import { ViewProfile } from '../customer/viewprofile';
 
 
 
@@ -25,9 +25,11 @@ export function SearchProjects(): React.JSX.Element {
   const [search, setsearch] = useState({
    Search : ""
   });
+  const [profile, setprofile] = React.useState<string>("");
   const [project, setproject] = useState<Project[]>([]);
 
   const [open, setOpen] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
 
   const [selectedProject, setSelectedProject] = useState<Project>(); 
 
@@ -36,8 +38,14 @@ export function SearchProjects(): React.JSX.Element {
     setOpen(true); 
   };
 
+  const handleOpen2 = (sellerid:string) => {
+    setprofile(sellerid);
+    setOpen2(true); 
+  };
+
   
   const handleClose = () => setOpen(false);
+  const handleClose2 = () => setOpen2(false);
 
   useEffect(() => {
     
@@ -133,14 +141,19 @@ export function SearchProjects(): React.JSX.Element {
               <p>Lenght: {projects.projectLength}</p>
               <p>Price: {`${projects.price}`}</p>
               <p>Type: {projects.projectType}</p>
-
-              {usertype == 'Freelancer' && <Button onClick={()=>handleOpen(projects)} variant="contained">
+      <p>
+              {usertype == 'Freelancer' && <Button sx={{marginRight:1}} onClick={()=>handleOpen(projects)} variant="contained">
                   Add Bid
                 </Button>}
+                <Button onClick={()=>handleOpen2(projects.sellerId._id)} variant="contained">
+                  View Seller Profile
+                </Button>
+                </p>
              </Card>
       
         ))}
               {open && <AddBidModal open={open} handleClose={handleClose} projdata={selectedProject} />}
+              {open2 && <ViewProfile open={open2} handleClose={handleClose2} userid={profile} />}
     
     </Box>
     <Box sx={{ display: 'flex', justifyContent: 'center' ,marginTop:3}}>
