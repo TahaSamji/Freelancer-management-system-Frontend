@@ -190,7 +190,6 @@ export function Bids(): React.JSX.Element {
   
          }
        catch (e) {
-        window.alert("ERROR");
         console.error(e);
       }
     };
@@ -214,7 +213,7 @@ export function Bids(): React.JSX.Element {
        
           setBids(res.data.data);
          
-          console.log("data",res.data.data);
+    
           
           }
           return;
@@ -231,14 +230,14 @@ export function Bids(): React.JSX.Element {
       ShowBids();
 
       
+      
     }, []);
-
     useEffect(() => {
       
-      console.log("bidss",myBids)
+      ShowBids();
 
-      
-    }, [myBids]);
+    }, [open]);
+   
     useEffect(() => {
       
       console.log("myproj",project)
@@ -294,7 +293,7 @@ export function Bids(): React.JSX.Element {
             </Card>
           ))}
           {open && <EditBidModal open={open} handleClose={handleClose} projdata={selectedProject} />}
-          {/* {open2 && <AddProject open={open2} handleClose={handleClose2} />} */}
+          
         </Box>}
         {status!=='bids' && <Box
           sx={{

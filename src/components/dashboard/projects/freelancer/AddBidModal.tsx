@@ -9,8 +9,8 @@ import { useEffect,useState,ChangeEvent } from 'react';
 
 const AddBidModal = ({open ,handleClose,projdata}) => {
     const token  = useAppSelector((state) => state.reducers.userReducer.token);
-    let error = "";
 
+    
 
     const [biddata, setBid] = useState({
       projectId :projdata._id,
@@ -21,6 +21,8 @@ const AddBidModal = ({open ,handleClose,projdata}) => {
   useEffect(() => {
     
     console.log("this is Data",biddata);
+    // setBid({message:biddata.message,bidAmount:biddata.bidAmount,projectId:projdata._id});
+
   }, [biddata]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +44,7 @@ const AddBidModal = ({open ,handleClose,projdata}) => {
             
             url: "http://localhost:5600/project/Projectbid",
             method: "post",
-            data:biddata,
+            data:{bidAmount:biddata.bidAmount,message:biddata.message,projectId:biddata.projectId},
             headers: {
               Authorization: `Bearer ${token}` // Send token in the Authorization header
             }
@@ -60,22 +62,8 @@ const AddBidModal = ({open ,handleClose,projdata}) => {
             
           
            }
-           if(res.status === 200){
-            
-            window.alert(res.data.msg);
-            
-            console.log(" data",res.data.data);
-            handleClose();
-            return;
-            
-          
-           }
-           
-           
-
            
             
-    
            }
          catch (e) {
           window.alert("You already have a bid on this Project , Please Edit your Bid in the Bids Menu");
