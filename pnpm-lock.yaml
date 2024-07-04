@@ -95,6 +95,9 @@ importers:
       react-redux:
         specifier: ^9.1.0
         version: 9.1.2(@types/react@18.2.64)(react@18.2.0)(redux@5.0.1)
+      redux:
+        specifier: ^5.0.1
+        version: 5.0.1
       zod:
         specifier: 3.22.4
         version: 3.22.4
