@@ -87,6 +87,10 @@ const loginSubmit = async (event) => {
     if(udata.email === '' || udata.password === ''){
       window.alert("Please enter credentials");
     }
+   
+  
+    router.replace(paths.dashboard.overview);
+   
   
       event.preventDefault();
       const res = await axios({
@@ -100,7 +104,7 @@ const loginSubmit = async (event) => {
 
 
         console.log(res.data);
-        getprofile(res.data.token);
+        // getprofile(res.data.token);
         
      
       
@@ -110,7 +114,7 @@ const loginSubmit = async (event) => {
     }
       
     } catch (e) {
-      window.alert("ERROR");
+     
       console.error(e);
     }
   };

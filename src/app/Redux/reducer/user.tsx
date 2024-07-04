@@ -7,6 +7,11 @@ const initialState = {
   userDetails: {
     _id:"",
     utype:'',
+    email:"tahashamji@gmail.com",
+    fullName:"Taha",
+    position:"Engineer",
+    description:'Elite',
+    availability:"Online",
     notifications:[{ 
       message:"",
       ntype:"",
@@ -20,7 +25,7 @@ const initialState = {
   
   },
   token: "",
-  loggedIn: false
+  loggedIn: true
 };
 
 // ==============================|| SLICE - MENU ||============================== //
@@ -33,9 +38,7 @@ export const user = createSlice({
       state.userDetails = action.payload.userDetails;
       state.token = action.payload.token;
       state.loggedIn = true;
-      console.log("state.loggedIn",state.loggedIn);
-      console.log("state.userDetails",state.userDetails);
-      console.log("token",state.token);
+   
     
     },
     logoutUser:(state, action) => {
